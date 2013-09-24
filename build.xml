@@ -185,23 +185,24 @@
 
 		<!-- Reset src dir to post-forge-install state -->
 		<delete dir="${mcpsrc.dir}/minecraft/recipear"/>
-        <delete dir="${mcpsrc.dir}/minecraft/ic2"/>
-
+		<delete dir="${mcpsrc.dir}/minecraft/ic2"/>
+	
 	</target>
 
 	<!-- Package the compiled files -->
 	<target name="package" depends="reobf,pack-src">
-		<delete dir="${distribute.dir}"/>
-		<mkdir dir="${distribute.dir}"/>
 		<jar destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}.jar" basedir="${classes.dir}"/>
 	</target>
 
-    <!-- Package API -->
-    <target name="pack-src">
-        <zip destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}-src.zip" basedir="${src.dir}"/>
-    </target>
-
+	<!-- Package API -->
+	<target name="pack-src">
+		<zip destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}-src.zip" basedir="${src.dir}"/>
+	</target>
+	
 	<!-- Default target to run -->
-	<target name="main" depends="package"/>
+	<target name="main" depends="package">
+		<delete dir="${distribute.dir}"/>
+		<mkdir dir="${distribute.dir}"/>
+	</target>
 
 </project>
