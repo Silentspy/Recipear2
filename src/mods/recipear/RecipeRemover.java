@@ -1,25 +1,13 @@
 package mods.recipear;
 
-import ic2.api.recipe.Recipes;
-import ic2.core.AdvRecipe;
-import ic2.core.AdvShapelessRecipe;
-
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 
 /* import thaumcraft.api.crafting.ShapedArcaneCraftingRecipes;
@@ -30,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class RecipeRemover {
 
-	public int RemoveRecipesIC2() {
+	/*public int RemoveRecipesIC2() {
 		int itemsremoved = 0;
 
 		if (mod_recipear.IC2Detected) {
@@ -87,8 +75,6 @@ public class RecipeRemover {
 		}
 		return itemsremoved;
 	}
-
-	/*
 	 * public int RemoveRecipesTC3() { int itemsremoved = 0; if
 	 * (mod_recipear.Thaumcraft3Detected) {
 	 * 
@@ -127,7 +113,6 @@ public class RecipeRemover {
 	 * if (Check(ItemID, ItemMetaData)) { RecipearLogger.debug("Removing " +
 	 * ItemID + ":" + ItemMetaData); itr.remove(); itemsremoved++; } } } return
 	 * itemsremoved; }
-	 */
 
 	public int RemoveRecipes(Side side) {
 
@@ -237,4 +222,5 @@ public class RecipeRemover {
 
 		return itemsremoved;
 	}
+	*/
 }
