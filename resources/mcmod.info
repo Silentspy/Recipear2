@@ -1,0 +1,17 @@
+[
+{
+  "modid": "Recipear2",
+  "name": "Recipear2",
+  "description": "Removes Recipes",
+  "version": "2.0",
+  "mcversion": "1.6.2",
+  "url": "http://www.silentspy.net/recipear",
+  "updateUrl": "",
+  "authors": ["Silentspy"],
+  "credits": "Mod by Silentspy",
+  "logoFile": "",
+  "screenshots": [],
+  "parent":"",
+  "dependencies": []
+}
+]
