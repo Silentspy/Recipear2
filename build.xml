@@ -10,7 +10,7 @@
 	<property name="download.dir" value="download"/>
 
 	<property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="jar.dir" value="bin"/>
+	<property name="distribute.dir" value="distribute"/>
 
 	<property name="forge.dir" value="${build.dir}/forge"/>
 	<property name="mcp.dir" value="${forge.dir}/mcp"/>
@@ -51,7 +51,7 @@
 
 	<!-- Set full version -->
 	<target name="initialize-version" depends="version-provided,version-not-provided,git-revision">
-		<property name="project.version.full" value="${recipear.version}.b${build.number}"/>
+		<property name="project.version.full" value="${recipear.version}-b${build.number}"/>
 	</target>
 
 	<!-- Set unknown build number -->
@@ -190,18 +190,15 @@
 	</target>
 
 	<!-- Package the compiled files -->
-	<target name="package" depends="reobf">
-		<delete dir="${jar.dir}"/>
-		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/Recipear2-${mc.version}-${project.version.full}.jar" basedir="${classes.dir}"/>
+	<target name="package" depends="reobf,pack-src">
+		<delete dir="${distribute.dir}"/>
+		<mkdir dir="${distribute.dir}"/>
+		<jar destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}.jar" basedir="${classes.dir}"/>
 	</target>
 
     <!-- Package API -->
-    <target name="pack-src" depends="initialize-version">
-        <mkdir dir="${jar.dir}/src"/>
-        <zip destfile="${jar.dir}/src/Recipear2-${mc.version}-${project.version.full}-src.jar">
-            <fileset dir="${src.dir}" includes="recipear/*"/>
-        </zip>
+    <target name="pack-src">
+        <zip destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}-src.zip" basedir="${src.dir}"/>
     </target>
 
 	<!-- Default target to run -->
