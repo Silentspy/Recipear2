@@ -19,12 +19,13 @@
 
 	<property name="mc.version" value="1.6.2"/>
 	<property name="forge.version" value="9.10.1.871"/>
+	<property name="ic2exp.version" value="200"/>
 
-    <property name="recipear.version" value="2.0.0" />
+	<property name="recipear.version" value="2.0.0" />
 
 	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
-	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.200-experimental.jar"/>
-	<property name="ic2.url" value="http://ic2api.player.to:8080/job/IC2_experimental/200/artifact/packages/"/>
+	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.${ic2exp.version}-experimental.jar"/>
+	<property name="ic2.url" value="http://ic2api.player.to:8080/job/IC2_experimental/${ic2exp.version}/artifact/packages/"/>
 	
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
 	<available property="ic2-exists" file="${download.dir}/${ic2.name}"/>
@@ -51,7 +52,7 @@
 
 	<!-- Set full version -->
 	<target name="initialize-version" depends="version-provided,version-not-provided,git-revision">
-		<property name="project.version.full" value="${recipear.version}-b${build.number}"/>
+		<property name="project.version.full" value="${recipear.version}-${build.number}"/>
 	</target>
 
 	<!-- Set unknown build number -->
@@ -64,6 +65,7 @@
 		<property name="build.number" value="${env.BUILD_NUMBER}"/>
 	</target>
 
+	<!-- Check with git and fetch a revision -->
 	<target name="git-revision" if="git.present">
 		<exec executable="git" dir="." outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
 			<arg value="rev-parse"/>
@@ -83,28 +85,22 @@
 	
 	<!-- Download IC2 unless it exists -->
 	<target name="download-ic2" unless="ic2-exists">
-	        <get src="${ic2.url}${ic2.name}" dest="${download.dir}" usetimestamp="True"/>
+			<get src="${ic2.url}${ic2.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
 
 	<!-- Setup mcp and forge -->
 	<target name="setup" depends="download-files" if="out-of-date">
-
 		<delete dir="${forge.dir}" failonerror="false"/>
-
 		<unzip dest="${forge.dir}/.." src="${download.dir}/${forge.name}"/>
-
 		<!-- Fix executable permissions -->
 		<chmod dir="${forge.dir}" perm="ugo+rx" includes="**.sh"/>
-
 		<!-- Install forge -->
 		<exec dir="${forge.dir}" executable="${forge.dir}/fml/python/python_fml" osfamily="windows">
 			<arg line="install.py --no-assets"/>
 		</exec>
-
 		<exec dir="${forge.dir}" executable="python" osfamily="unix">
 			<arg line="install.py --no-assets"/>
 		</exec>
-
 	</target>
 
 	<target name="copy-src">
@@ -119,12 +115,12 @@
 	
 	<target name="copy-ic2">
 		<delete>
-		    <fileset dir="${mcp.dir}/lib" includes="industrialcraft-2-dev-deobf*.jar"/>
+			<fileset dir="${mcp.dir}/lib" includes="industrialcraft-2-dev-deobf*.jar"/>
 		</delete>
-        <!-- Copy sources -->
-        <copy todir="${mcp.dir}/lib">
-            <fileset dir="${download.dir}" includes="industrialcraft-2-dev-deobf*.jar"/>
-        </copy>
+		<!-- Copy sources -->
+		<copy todir="${mcp.dir}/lib">
+			<fileset dir="${download.dir}" includes="industrialcraft-2-dev-deobf*.jar"/>
+		</copy>
 	</target>
 
 	<target name="compile" depends="initialize-version,setup,copy-src,copy-ic2">
@@ -186,7 +182,8 @@
 		<!-- Reset src dir to post-forge-install state -->
 		<delete dir="${mcpsrc.dir}/minecraft/recipear"/>
 		<delete dir="${mcpsrc.dir}/minecraft/ic2"/>
-	
+		<delete dir="${distribute.dir}"/>
+		<mkdir dir="${distribute.dir}"/>
 	</target>
 
 	<!-- Package the compiled files -->
@@ -194,14 +191,11 @@
 		<jar destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}.jar" basedir="${classes.dir}"/>
 	</target>
 
-	<!-- Package API -->
+	<!-- Package SRC -->
 	<target name="pack-src">
-	    <delete dir="${distribute.dir}"/>
-	    <mkdir dir="${distribute.dir}"/>
 		<zip destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}-src.zip" basedir="${src.dir}"/>
 	</target>
 	
 	<!-- Default target to run -->
 	<target name="main" depends="package"/>
-
 </project>

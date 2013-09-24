@@ -4,29 +4,16 @@ public class BannedRecipe {
 	int id, metadata;
 	String name, type;
 	
-	/**
-	 * @param id
-	 */
 	public BannedRecipe(int id) 
 	{ 
 		this(id, -1, "DEFAULT");
 	}
 	
-	/**
-	 * @param id
-	 * @param metadata
-	 */
 	public BannedRecipe(int id, int metadata) 
 	{ 
 		this(id, metadata, "DEFAULT");
 	}
 	
-	/**
-	 * @param id
-	 * @param metadata
-	 * @param mod
-	 * @param type
-	 */
 	public BannedRecipe(int id, int metadata, String type) 
 	{ 
 	    this.id = id;
@@ -48,9 +35,6 @@ public class BannedRecipe {
 	    this.type = type;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,10 +45,7 @@ public class BannedRecipe {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -91,6 +72,7 @@ public class BannedRecipe {
 		return true;
 	}
 	
+	@Override
 	public String toString() 
 	{
 		if(id > 0) {
