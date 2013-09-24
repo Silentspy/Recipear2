@@ -20,8 +20,7 @@
 	<property name="mc.version" value="1.6.2"/>
 	<property name="forge.version" value="9.10.1.871"/>
 
-    <property name="version.major" value="0"/>
-    <property name="version.minor" value="0"/>
+    <property name="recipear.version" value="2.0.0" />
 
 	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.200-experimental.jar"/>
@@ -52,7 +51,7 @@
 
 	<!-- Set full version -->
 	<target name="initialize-version" depends="version-provided,version-not-provided,git-revision">
-		<property name="project.version.full" value="${build.number}.${git.revision}"/>
+		<property name="project.version.full" value="${recipear.version}.b${build.number}"/>
 	</target>
 
 	<!-- Set unknown build number -->
