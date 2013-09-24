@@ -3,25 +3,25 @@ package mods.recipear;
 public class BannedRecipe {
 	int id, metadata;
 	String name, type;
-	
+
 	public BannedRecipe(int id) 
 	{ 
 		this(id, -1, "DEFAULT");
 	}
-	
+
 	public BannedRecipe(int id, int metadata) 
 	{ 
 		this(id, metadata, "DEFAULT");
 	}
-	
+
 	public BannedRecipe(int id, int metadata, String type) 
 	{ 
-	    this.id = id;
-	    this.metadata = metadata;
-	    this.name = null;
-	    this.type = type;
+		this.id = id;
+		this.metadata = metadata;
+		this.name = null;
+		this.type = type;
 	}
-	
+
 	public BannedRecipe(String name) 
 	{
 		this(name, "DEFAULT");
@@ -31,10 +31,10 @@ public class BannedRecipe {
 	{
 		this.name = name;
 		this.id = 0;
-	    this.metadata = -1;
-	    this.type = type;
+		this.metadata = -1;
+		this.type = type;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -45,7 +45,7 @@ public class BannedRecipe {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -71,7 +71,7 @@ public class BannedRecipe {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() 
 	{
@@ -80,5 +80,5 @@ public class BannedRecipe {
 		} else {
 			return String.format("BannedRecipe[name: %s, type: %s]", name, type);
 		}
-    }
+	}
 }

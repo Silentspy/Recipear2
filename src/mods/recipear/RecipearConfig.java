@@ -16,18 +16,18 @@ public class RecipearConfig {
 	public static boolean removeingame = false;
 	public static boolean debug = false;
 	public static int removeingameinterval = 60;
-	public static String placeholderName = "Banned Recipe";
-	public static String placeholderDescription = "Not Craftable";
+	public static String placeholderName = "$cBanned Recipe";
+	public static String placeholderDescription = "$eThis item have been disabled by the server.";
 
 	public RecipearConfig(FMLPreInitializationEvent event) 
 	{
 		File recipearDataFolder = new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Recipear");
 		recipearDataFolder.mkdir();
-		
+
 		Properties(event, recipearDataFolder);
 		BannedRecipesProperties(event, recipearDataFolder);
 	}
-	
+
 	private static void Properties(FMLPreInitializationEvent event, File recipearDataFolder) 
 	{
 		RecipearLogger.info("loading Recipear" + File.separator + "Core.cfg");
@@ -35,11 +35,11 @@ public class RecipearConfig {
 		try
 		{
 			cfg.load();
-			removeingame = cfg.get("Features", "RemoveIngame", false, "Set this to true if you want to remove banned items from players at login and every interval").getBoolean(false);
-			removeingameinterval = cfg.get("Features", "RemoveIngameInterval", 60, "Interval in seconds to check if player have a banned item, default is 60 seconds").getInt(60);
-			debug  = cfg.get(cfg.CATEGORY_GENERAL, "Debug", false, "Turns on debug output in console/log, good if you need to see the inner workings.").getBoolean(false);
-			placeholderName = cfg.get("BannedItem", "Name", "Banned Recipe", "The name of the fake item that is banned").getString();
-			placeholderDescription = cfg.get("BannedItem", "Description", "Banned Recipe", "The Description of the fake item that is banned").getString();
+			removeingame = cfg.get("Features", "RemoveIngame", removeingame, "Set this to true if you want to remove banned items from players at login and every interval").getBoolean(false);
+			removeingameinterval = cfg.get("Features", "RemoveIngameInterval", removeingameinterval, "Interval in seconds to check if player have a banned item, default is 60 seconds").getInt(60);
+			debug  = cfg.get(cfg.CATEGORY_GENERAL, "Debug", debug, "Turns on debug output in console/log, good if you need to see the inner workings.").getBoolean(false);
+			placeholderDescription = cfg.get("BannedItem", "Description", placeholderDescription, "The Description of banned item, supports color formatting").getString();
+			placeholderName = cfg.get("BannedItem", "Name", placeholderName, "The name of the item that is banned, supports color formatting").getString();
 		}
 		catch (Exception e) 
 		{
@@ -50,37 +50,42 @@ public class RecipearConfig {
 			cfg.save();
 		}
 	}
-	
+
 	private static void BannedRecipesProperties(FMLPreInitializationEvent event, File recipearDataFolder) {
 		try
 		{
 			RecipearLogger.info("loading Recipear" + File.separator + "BannedRecipes.cfg");
 			File file = new File(recipearDataFolder + File.separator + "BannedRecipes.cfg");
 			String comment = 
-					"# Format is <ID>:[METADATA]:[MOD]:[TYPE], the [] is entirely optional and <> is required\n"
-					+ "# Dont use the brackets around them, if i want to ban red dye i would type 351:1 on it's own line\n"
-					+ "# And 30173:-1:IC2:WORKBENCH if i wanna ban Quantum Body Armor from IC2 in the Workbench.\n";
-			
+					"# Format for removing items by ID is <ID>[:METADATA][:TYPE] and by Names is <NAME>[:TYPE], every recipe ban needs to be seperated with a new line,\n"
+					+ "# also supports comments.. and to see supported TYPE's check out the log file.\n"
+					+ "# Examples:\n"
+					+ "#  58 #Removes Crafting Table entirely from being crafted\n"
+					+ "#  CraftingTable #same as above\n"
+					+ "#  CrAfTiNGTaBlE #same as above, but please note that you should always keep a good structure\n"
+					+ "#  Iron Dust # Will disable it from being crafted entirely\n"
+					+ "#  Iron Dust:MACERATOR # Will disable it only from IC2 Macerator\n";
+
 			if(createCfgFile(file, comment)) {
 				List<String> lines = Files.readLines(file, Charsets.ISO_8859_1);
-				
+
 				int count = 0, ITEMID = 0, METADATA = -1;
 				String NAME = null;
-				
+
 				for(String line : lines) {
 					count++;
 					if(!line.substring(0,1).contains("#")) 
 					{
 						// Clean from comments and whitespace
 						line = line.replaceAll("\\s+","").split("#")[0];
-						
+
 						String[] BannedRecipeRaw = line.split(":");
-						
+
 						NAME = null;
 						ITEMID = 0;
 						METADATA = -1;
 						String TYPE = "DEFAULT";
-						
+
 						try 
 						{
 							if(RecipearUtil.isInteger(BannedRecipeRaw[0]) && (Integer.valueOf(BannedRecipeRaw[0]) > 0)) {
@@ -96,14 +101,14 @@ public class RecipearConfig {
 							RecipearLogger.warning("Failed to add BannedRecipe at line " + count + ", check your formatting");
 							continue;
 						}
-						
+
 						BannedRecipe BANNEDRECIPE = new BannedRecipe(ITEMID, METADATA, TYPE);
-						
+
 						if(ITEMID == 0)
 							BANNEDRECIPE.name = NAME;
-							
+
 						BannedRecipes.AddBannedRecipe(BANNEDRECIPE);
-						
+
 						RecipearLogger.info("Added: " + BANNEDRECIPE.toString());
 					}
 				}
@@ -114,7 +119,7 @@ public class RecipearConfig {
 			RecipearLogger.severe("has a problem loading Recipear" + File.separator + "BannedRecipes.cfg: " + e.getMessage());
 		}
 	}
-	
+
 	private static boolean createCfgFile(File file, String comment) {
 		if(!file.exists()) 
 		{
@@ -132,7 +137,7 @@ public class RecipearConfig {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 }

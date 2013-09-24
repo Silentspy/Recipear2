@@ -62,7 +62,7 @@
 
 	<!-- Set build number from environment -->
 	<target name="version-provided" if="env.BUILD_NUMBER">
-		<property name="build.number" value="${env.BUILD_NUMBER}"/>
+		<property name="build.number" value="b${env.BUILD_NUMBER}"/>
 	</target>
 
 	<!-- Check with git and fetch a revision -->

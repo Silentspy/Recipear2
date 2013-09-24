@@ -12,15 +12,15 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class RecipearVanilla {
-	
+
 	public int RemoveRecipes(Side side) {
 
 		int itemsremoved = 0;
 
 		List recipelist = CraftingManager.getInstance().getRecipeList();
 
-		RecipearLogger.info("Checking " + recipelist.size() + " recipe(s)");
-		
+		RecipearLogger.info("Scanning " + recipelist.size() + " recipe(s)");
+
 		int NBTTAGSCOUNT = 0, ITEMID, METADATA;
 		String DISPLAYNAME;
 		ItemStack RECIPE_OUTPUT;
@@ -34,23 +34,22 @@ public class RecipearVanilla {
 			RECIPE_OUTPUT = iRecipe.getRecipeOutput();
 
 			if (RECIPE_OUTPUT == null) continue;
-			
+
 			ITEMID = RECIPE_OUTPUT.itemID;
 			METADATA = RECIPE_OUTPUT.getItemDamage();
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
-			
+
 			DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
-			
+
 			if(LanguageRegistry.instance().getStringLocalization(DISPLAYNAME).length() > 0)
 				DISPLAYNAME = LanguageRegistry.instance().getStringLocalization(DISPLAYNAME);
-			
-			RecipearLogger.debug("Checking: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
-			
+
+			RecipearLogger.debug("OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
+
 			if(BannedRecipes.Check(ITEMID, METADATA, "WORKBENCH") || BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), "WORKBENCH")) {
 				if (side == Side.CLIENT) {
 					RecipearLogger.info("Placeholding: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
-					RECIPE_OUTPUT.setItemName(EnumChatFormatting.RED + RecipearConfig.placeholderName);
 					RecipearUtil.setCraftingRecipeOutput(iRecipe, RECIPE_OUTPUT);
 					itemsremoved++;
 					continue;
@@ -65,12 +64,12 @@ public class RecipearVanilla {
 
 		return itemsremoved;
 	}
-	
-	
+
+
 	public int RemoveFurnaceRecipes() {
-		RecipearLogger.info("Checking " + (FurnaceRecipes.smelting().getMetaSmeltingList().size() + FurnaceRecipes.smelting().getSmeltingList().size()) + " Furnace Recipe(s)");
+		RecipearLogger.info("Scanning " + (FurnaceRecipes.smelting().getMetaSmeltingList().size() + FurnaceRecipes.smelting().getSmeltingList().size()) + " Furnace Recipe(s)");
 		int itemsremoved = 0;
-		
+
 		int NBTTAGSCOUNT = 0, ITEMID, METADATA;
 		String DISPLAYNAME;
 		ItemStack RECIPE_OUTPUT;
@@ -88,14 +87,14 @@ public class RecipearVanilla {
 			DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
-			
+
 			if(LanguageRegistry.instance().getStringLocalization(DISPLAYNAME).length() > 0)
 				DISPLAYNAME = LanguageRegistry.instance().getStringLocalization(DISPLAYNAME);
 
-			RecipearLogger.debug("Checking: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
+			RecipearLogger.debug("OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
 
 			if (BannedRecipes.Check(ITEMID, METADATA, "FURNACE") || BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), "FURNACE")) {
-				RecipearLogger.debug("Removing: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
+				RecipearLogger.info("Removing: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
 				itr.remove();
 				itemsremoved++;
 			}
@@ -113,14 +112,14 @@ public class RecipearVanilla {
 			DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
-			
+
 			if(LanguageRegistry.instance().getStringLocalization(DISPLAYNAME).length() > 0)
 				DISPLAYNAME = LanguageRegistry.instance().getStringLocalization(DISPLAYNAME);
 
-			RecipearLogger.debug("Checking: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
+			RecipearLogger.debug("OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
 
 			if (BannedRecipes.Check(ITEMID, METADATA, "FURNACE") || BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), "FURNACE")) {
-				RecipearLogger.debug("Removing: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
+				RecipearLogger.info("Removing: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
 				itr.remove();
 				itemsremoved++;
 			}
