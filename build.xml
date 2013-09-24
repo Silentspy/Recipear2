@@ -196,13 +196,12 @@
 
 	<!-- Package API -->
 	<target name="pack-src">
+	    <delete dir="${distribute.dir}"/>
+	    <mkdir dir="${distribute.dir}"/>
 		<zip destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}-src.zip" basedir="${src.dir}"/>
 	</target>
 	
 	<!-- Default target to run -->
-	<target name="main" depends="package">
-		<delete dir="${distribute.dir}"/>
-		<mkdir dir="${distribute.dir}"/>
-	</target>
+	<target name="main" depends="package"/>
 
 </project>

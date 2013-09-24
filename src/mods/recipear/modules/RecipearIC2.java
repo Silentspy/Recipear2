@@ -17,7 +17,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-@Mod(modid = "Recipear2|IC2", name = "RecipearIC2", version = "1.0", dependencies="required-after:Recipear2@[2.0,)")
+@Mod(modid = "Recipear2|IC2", name = "Recipear2IC2", version = "1.0", dependencies="required-after:Recipear2@[2.0,)")
 public class RecipearIC2 {
 	
 	private boolean ic2 = false;
@@ -33,13 +33,4 @@ public class RecipearIC2 {
 			RecipearLogger.info("[IC2] Could not find IC2");
 		}
 	}
-	
-	public void setCraftingRecipeOutput(IRecipe iRecipe, ItemStack output) {	
-		if (iRecipe instanceof AdvRecipe) {
-			((AdvRecipe)iRecipe).output = output; 
-		} else if (iRecipe instanceof AdvShapelessRecipe) { 
-			((AdvShapelessRecipe)iRecipe).output = output; 
-		}
-	}
-	
 }

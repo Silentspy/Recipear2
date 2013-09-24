@@ -13,5 +13,22 @@
   "screenshots": [],
   "parent":"",
   "dependencies": []
+},
+{
+  "modid": "Recipear2|IC2",
+  "name": "Recipear2IC2",
+  "description": "Recipear IC2 Module",
+  "version": "1.0",
+  "mcversion": "1.6.2",
+  "url": "http://www.silentspy.net/recipear",
+  "updateUrl": "",
+  "authors": ["Silentspy"],
+  "credits": "Mod by Silentspy",
+  "logoFile": "",
+  "screenshots": [],
+  "parent":"Recipear2",
+  "dependencies": [
+  "Recipear2"
+  ]
 }
 ]
