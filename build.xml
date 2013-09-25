@@ -21,7 +21,7 @@
 	<property name="forge.version" value="9.10.1.871"/>
 	<property name="ic2exp.version" value="200"/>
 
-	<property name="recipear.version" value="2.0.0" />
+	<property name="recipear.version" value="2.0.1" />
 
 	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.${ic2exp.version}-experimental.jar"/>
