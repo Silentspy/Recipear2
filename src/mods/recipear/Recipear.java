@@ -18,10 +18,12 @@ import cpw.mods.fml.relauncher.Side;
 public class Recipear 
 {
 	public static boolean debug = true;
-
+	public static boolean server = false; 
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
+		server = (event.getSide().equals(Side.SERVER)) ? true : false;
 		BannedRecipes.AddBannedRecipeType("CRAFTING","FURNACE","INVENTORY");
 		new RecipearLogger().logger = event.getModLog();
 		new RecipearConfig(event);
@@ -71,8 +73,7 @@ public class Recipear
 				if (RECIPE_OUTPUT != null) 
 				{
 					String DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
-					if(LanguageRegistry.instance().getStringLocalization(DISPLAYNAME).length() > 0)
-						DISPLAYNAME = LanguageRegistry.instance().getStringLocalization(DISPLAYNAME);
+					RecipearUtil.getLanguageRegistryEntry(DISPLAYNAME);
 
 					if (BannedRecipes.Check(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage(), "INVENTORY") 
 							|| BannedRecipes.Check(DISPLAYNAME, "INVENTORY"))
