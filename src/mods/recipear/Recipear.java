@@ -14,7 +14,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Recipear2", name = "Recipear2", version = "2.0.0", dependencies="required-after:Forge@[9.10,);before:NotEnoughItems")
+@Mod(modid = "Recipear2", name = "Recipear2", version = "2.0.0", dependencies="required-after:Forge@[9.10,)")
 public class Recipear 
 {
 	public static boolean debug = true;
@@ -22,7 +22,7 @@ public class Recipear
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
-		BannedRecipes.AddBannedRecipeType("WORKBENCH","FURNACE");
+		BannedRecipes.AddBannedRecipeType("WORKBENCH","FURNACE","INVENTORY");
 		new RecipearLogger().logger = event.getModLog();
 		new RecipearConfig(event);
 	}
@@ -30,10 +30,6 @@ public class Recipear
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		long startTime = System.currentTimeMillis();
-		//RecipearConfig.debug = false;
-		RecipearLogger.info("Starting in " + event.getSide().toString() + " Mode");
-		
 		String supported_types = "Supported TYPES are";
 		
 		for(String type : BannedRecipes.getBannedRecipeTypes()) {
@@ -42,13 +38,16 @@ public class Recipear
 		
 		RecipearLogger.info(supported_types);
 		
-		RecipearVanilla recipear = new RecipearVanilla(); 
+		//RecipearConfig.debug = false;
 		if(BannedRecipes.GetBannedRecipeAmount() > 0) {
+			long startTime = System.currentTimeMillis();
+			
+			RecipearLogger.info("Starting in " + event.getSide().toString() + " Mode");
+			RecipearVanilla recipear = new RecipearVanilla();
 			RecipearLogger.info("Removed " + recipear.RemoveRecipes(event.getSide()) + " Workbench recipe(s)");
 			RecipearLogger.info("Removed " + recipear.RemoveFurnaceRecipes() + " Furnace recipe(s)");
+			RecipearLogger.info("Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 		}
-		long endTime = System.currentTimeMillis();
-		RecipearLogger.info("Finished in " + (endTime - startTime) + "ms");
 	}
 
 	@EventHandler

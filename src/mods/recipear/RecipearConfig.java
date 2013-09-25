@@ -17,7 +17,7 @@ public class RecipearConfig {
 	public static boolean debug = false;
 	public static int removeingameinterval = 60;
 	public static String placeholderName = "$cBanned Recipe";
-	public static String placeholderDescription = "$eThis item have been disabled by the server.";
+	public static String placeholderDescription = "$eThis item has been disabled by server";
 
 	public RecipearConfig(FMLPreInitializationEvent event) 
 	{

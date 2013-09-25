@@ -28,7 +28,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
-@Mod(modid = "Recipear2|IC2", name = "Recipear2IC2", version = "1.0", dependencies="required-after:Recipear2@[2.0,)")
+@Mod(modid = "Recipear2|IC2", version = "1.0", dependencies="required-after:Recipear2@[2.0,)")
 public class RecipearIC2 {
 
 	private boolean ic2 = false;
@@ -46,12 +46,14 @@ public class RecipearIC2 {
 
 		if(ic2) {
 			if(BannedRecipes.GetBannedRecipeAmount() > 0) {
+				long startTime = System.currentTimeMillis();
 				RecipearLogger.info("[IC2] Starting in " + event.getSide().toString() + " Mode");
-				RecipearLogger.info("Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE")  + " CENTRIFUGE recipe(s)");
-				RecipearLogger.info("Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR")  + " COMPRESSOR recipe(s)");
-				RecipearLogger.info("Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR")  + " EXTRACTOR recipe(s)");
-				RecipearLogger.info("Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR")  + " MACERATOR recipe(s)");
-				RecipearLogger.info("Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING")  + " OREWASHING recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE")  + " CENTRIFUGE recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR")  + " COMPRESSOR recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR")  + " EXTRACTOR recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR")  + " MACERATOR recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING")  + " OREWASHING recipe(s)");
+				RecipearLogger.info("[IC2] Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 			}
 		} else {
 			RecipearLogger.info("[IC2] Could not find IC2");
