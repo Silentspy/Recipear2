@@ -82,8 +82,11 @@ public class RecipearUtil {
 	}
 
 	public static String getLanguageRegistryEntry (String entry) {
+		if(entry == null) return "Unknown";
+		
 		if(LanguageRegistry.instance().getStringLocalization(entry).length() > 0)
 			entry = LanguageRegistry.instance().getStringLocalization(entry);
+		
 		return entry;
 	}
 
