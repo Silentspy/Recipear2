@@ -74,7 +74,7 @@ public class RecipearConfig {
 
 				for(String line : lines) {
 					count++;
-					if(!line.substring(0,1).contains("#")) 
+					if((line.length() > 0) && (!line.substring(0,1).contains("#"))) 
 					{
 						// Clean from comments and whitespace
 						line = line.replaceAll("\\s+","").split("#")[0];
@@ -116,7 +116,7 @@ public class RecipearConfig {
 		} 
 		catch (Exception e) 
 		{
-			RecipearLogger.severe("has a problem loading Recipear" + File.separator + "BannedRecipes.cfg: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

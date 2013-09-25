@@ -14,7 +14,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Recipear2", name = "Recipear2", version = "2.0.0", dependencies="required-after:Forge@[9.10,)")
+@Mod(modid = "Recipear2", name = "Recipear2", version = "2.0.0", dependencies="required-after:Forge@[9.10,);before:NotEnoughItems")
 public class Recipear 
 {
 	public static boolean debug = true;
