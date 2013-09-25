@@ -17,7 +17,7 @@ public class RecipearConfig {
 	public static boolean debug = false;
 	public static int removeingameinterval = 60;
 	public static String placeholderName = "$cBanned Recipe";
-	public static String placeholderDescription = "$eThis item has been disabled by server";
+	public static String placeholderDescription = "$eThis item has been disabled by the server";
 
 	public RecipearConfig(FMLPreInitializationEvent event) 
 	{
@@ -38,8 +38,8 @@ public class RecipearConfig {
 			removeingame = cfg.get("Features", "RemoveIngame", removeingame, "Set this to true if you want to remove banned items from players at login and every interval").getBoolean(false);
 			removeingameinterval = cfg.get("Features", "RemoveIngameInterval", removeingameinterval, "Interval in seconds to check if player have a banned item, default is 60 seconds").getInt(60);
 			debug  = cfg.get(cfg.CATEGORY_GENERAL, "Debug", debug, "Turns on debug output in console/log, good if you need to see the inner workings.").getBoolean(false);
-			placeholderDescription = cfg.get("BannedItem", "Description", placeholderDescription, "The Description of banned item, supports color formatting").getString();
-			placeholderName = cfg.get("BannedItem", "Name", placeholderName, "The name of the item that is banned, supports color formatting").getString();
+			placeholderDescription = cfg.get("BannedItem", "Description", placeholderDescription, "Description of banned item, supports color formatting").getString();
+			placeholderName = cfg.get("BannedItem", "Name", placeholderName, "Name of the item that is banned, supports color formatting").getString();
 		}
 		catch (Exception e) 
 		{
@@ -62,7 +62,8 @@ public class RecipearConfig {
 					+ "# Examples:\n"
 					+ "#  58 #Removes Crafting Table entirely from being crafted\n"
 					+ "#  CraftingTable #same as above\n"
-					+ "#  CrAfTiNGTaBlE #same as above, but please note that you should always keep a good structure\n"
+					+ "#  58:CRAFTING #Removes Crafting Table from Crafting\n"
+					+ "#  58:0:CRAFTING #Removes Crafting Table with metadata 0 from Crafting\n"
 					+ "#  Iron Dust # Will disable it from being crafted entirely\n"
 					+ "#  Iron Dust:MACERATOR # Will disable it only from IC2 Macerator\n";
 
@@ -90,11 +91,16 @@ public class RecipearConfig {
 						{
 							if(RecipearUtil.isInteger(BannedRecipeRaw[0]) && (Integer.valueOf(BannedRecipeRaw[0]) > 0)) {
 								ITEMID = Integer.parseInt(BannedRecipeRaw[0]);
-								METADATA = (BannedRecipeRaw.length > 1) ? Integer.parseInt(BannedRecipeRaw[1]) : -1;
+								if((BannedRecipeRaw.length > 1) && (RecipearUtil.isInteger(BannedRecipeRaw[1]))) {
+									METADATA = (BannedRecipeRaw.length > 1) ? Integer.parseInt(BannedRecipeRaw[1]) : -1;
+									TYPE = (BannedRecipeRaw.length > 2) ? BannedRecipeRaw[2].toUpperCase() : "DEFAULT";
+								} else {
+									TYPE = (BannedRecipeRaw.length > 1) ? BannedRecipeRaw[1].toUpperCase() : "DEFAULT";
+								}
 							} else {
 								NAME = BannedRecipeRaw[0].toLowerCase();
+								TYPE = (BannedRecipeRaw.length > 1) ? BannedRecipeRaw[1].toUpperCase() : "DEFAULT";
 							}
-							TYPE = (BannedRecipeRaw.length > 2) ? BannedRecipeRaw[2].toUpperCase() : "DEFAULT";
 						}
 						catch (Exception e) 
 						{

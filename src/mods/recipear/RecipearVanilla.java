@@ -19,7 +19,7 @@ public class RecipearVanilla {
 
 		List recipelist = CraftingManager.getInstance().getRecipeList();
 
-		RecipearLogger.info("Scanning " + recipelist.size() + " recipe(s)");
+		RecipearLogger.info("Scanning " + recipelist.size() + " Crafting recipe(s)");
 
 		int NBTTAGSCOUNT = 0, ITEMID, METADATA;
 		String DISPLAYNAME;
@@ -47,7 +47,7 @@ public class RecipearVanilla {
 
 			RecipearLogger.debug("OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
 
-			if(BannedRecipes.Check(ITEMID, METADATA, "WORKBENCH") || BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), "WORKBENCH")) {
+			if(BannedRecipes.Check(ITEMID, METADATA, "CRAFTING") || BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), "CRAFTING")) {
 				if (side == Side.CLIENT) {
 					RecipearLogger.info("Placeholding: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
 					RecipearUtil.setCraftingRecipeOutput(iRecipe, RECIPE_OUTPUT);

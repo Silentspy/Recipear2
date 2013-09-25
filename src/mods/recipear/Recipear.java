@@ -22,7 +22,7 @@ public class Recipear
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
-		BannedRecipes.AddBannedRecipeType("WORKBENCH","FURNACE","INVENTORY");
+		BannedRecipes.AddBannedRecipeType("CRAFTING","FURNACE","INVENTORY");
 		new RecipearLogger().logger = event.getModLog();
 		new RecipearConfig(event);
 	}
@@ -44,7 +44,7 @@ public class Recipear
 			
 			RecipearLogger.info("Starting in " + event.getSide().toString() + " Mode");
 			RecipearVanilla recipear = new RecipearVanilla();
-			RecipearLogger.info("Removed " + recipear.RemoveRecipes(event.getSide()) + " Workbench recipe(s)");
+			RecipearLogger.info("Removed " + recipear.RemoveRecipes(event.getSide()) + " Crafting recipe(s)");
 			RecipearLogger.info("Removed " + recipear.RemoveFurnaceRecipes() + " Furnace recipe(s)");
 			RecipearLogger.info("Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 		}

@@ -26,7 +26,7 @@
 	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.${ic2exp.version}-experimental.jar"/>
 	<property name="ic2.url" value="http://ic2api.player.to:8080/job/IC2_experimental/${ic2exp.version}/artifact/packages/"/>
-	
+
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
 	<available property="ic2-exists" file="${download.dir}/${ic2.name}"/>
 	<available file=".git" type="dir" property="git.present"/>
@@ -82,10 +82,10 @@
 	<target name="download-forge" unless="forge-exists">
 		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
-	
+
 	<!-- Download IC2 unless it exists -->
 	<target name="download-ic2" unless="ic2-exists">
-			<get src="${ic2.url}${ic2.name}" dest="${download.dir}" usetimestamp="True"/>
+		<get src="${ic2.url}${ic2.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
 
 	<!-- Setup mcp and forge -->
@@ -103,6 +103,10 @@
 		</exec>
 	</target>
 
+	<target name="change-debug-boolean">
+		<replace file="${mcpsrc.dir}/minecraft/mods/recipear/Recipear.java" token="public static boolean debug = true;" value="public static boolean debug = false;" />
+	</target>
+
 	<target name="copy-src">
 		<!-- Copy sources -->
 		<copy todir="${mcpsrc.dir}/minecraft">
@@ -112,7 +116,7 @@
 			</filterset>
 		</copy>
 	</target>
-	
+
 	<target name="copy-ic2">
 		<delete>
 			<fileset dir="${mcp.dir}/lib" includes="industrialcraft-2-dev-deobf*.jar"/>
@@ -123,7 +127,7 @@
 		</copy>
 	</target>
 
-	<target name="compile" depends="initialize-version,setup,copy-src,copy-ic2">
+	<target name="compile" depends="initialize-version,setup,copy-src,copy-ic2,change-debug-boolean">
 
 		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
@@ -195,7 +199,7 @@
 	<target name="pack-src">
 		<zip destfile="${distribute.dir}/Recipear2-${mc.version}-${project.version.full}-src.zip" basedir="${src.dir}"/>
 	</target>
-	
+
 	<!-- Default target to run -->
 	<target name="main" depends="package"/>
 </project>
