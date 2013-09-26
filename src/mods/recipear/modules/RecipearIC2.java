@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import mods.recipear.BannedRecipes;
+import mods.recipear.Recipear;
 import mods.recipear.RecipearLogger;
 import mods.recipear.RecipearUtil;
 import net.minecraft.item.ItemStack;
@@ -81,12 +82,8 @@ public class RecipearIC2 {
 						if(itemstack.getDisplayName() == null) continue;
 						
 						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack.getDisplayName()) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
-						
-						if(RECIPE_INPUT_DISPLAYNAME.equals("N/A")) {
-							RECIPE_INPUT_DISPLAYNAME = temp;
-						} else {
-							RECIPE_INPUT_DISPLAYNAME += ", " + temp;
-						}
+
+						RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
 						
 						} catch (Exception ex) {
 							RecipearLogger.warning("[IC2] Failed to fetch name for " + itemstack.itemID + ":" + itemstack.getItemDamage());
@@ -122,7 +119,7 @@ public class RecipearIC2 {
 						
 					RecipearLogger.debug("[IC2] OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
 
-					if(BannedRecipes.Check(ITEMID, METADATA, machine) || 
+					if((!Recipear.outputting) && BannedRecipes.Check(ITEMID, METADATA, machine) || 
 							BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), machine)) {
 						RecipearLogger.info("[IC2] Removing entry(" + RECIPE_INPUT_DISPLAYNAME + ") to craft: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
 						//RECIPE_OUTPUT_FOUND.add(RECIPE_OUTPUT);

@@ -1,7 +1,9 @@
 package mods.recipear;
 
+import net.minecraft.command.ServerCommandManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.common.Mod;
@@ -14,18 +16,19 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Recipear2", name = "Recipear2", version = "2.0.1", dependencies="required-after:Forge@[9.10,)")
+@Mod(modid = "Recipear2", name = "Recipear2", version = "2.0.2", dependencies="required-after:Forge@[9.10,)")
 public class Recipear 
 {
 	public static boolean debug = true;
 	public static boolean server = false; 
+	public static boolean outputting = false;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
 		server = (event.getSide().equals(Side.SERVER)) ? true : false;
 		BannedRecipes.AddBannedRecipeType("CRAFTING","FURNACE","INVENTORY");
-		new RecipearLogger().logger = event.getModLog();
+		RecipearLogger.setLogger(event.getModLog());
 		new RecipearConfig(event);
 	}
 
@@ -46,7 +49,7 @@ public class Recipear
 			
 			RecipearLogger.info("Starting in " + event.getSide().toString() + " Mode");
 			RecipearVanilla recipear = new RecipearVanilla();
-			RecipearLogger.info("Removed " + recipear.RemoveRecipes(event.getSide()) + " Crafting recipe(s)");
+			RecipearLogger.info("Removed " + recipear.RemoveRecipes() + " Crafting recipe(s)");
 			RecipearLogger.info("Removed " + recipear.RemoveFurnaceRecipes() + " Furnace recipe(s)");
 			RecipearLogger.info("Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 		}
@@ -54,6 +57,8 @@ public class Recipear
 
 	@EventHandler
 	void ServerStartedEvent(FMLServerStartedEvent event) {
+		//ServerCommandManager serverCommand = (ServerCommandManager)MinecraftServer.getServer().getCommandManager();
+        //serverCommand.registerCommand(new RecipearCommand());
 		if((BannedRecipes.GetBannedRecipeAmount() > 0) && (RecipearConfig.removeingame)) {
 			RecipearLogger.info("Starting Player Tracker and Tick Handler for Removing items from player");
 			GameRegistry.registerPlayerTracker(new RecipearPlayerEvent());
