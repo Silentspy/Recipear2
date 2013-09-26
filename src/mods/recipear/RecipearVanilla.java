@@ -39,10 +39,8 @@ public class RecipearVanilla {
 			METADATA = RECIPE_OUTPUT.getItemDamage();
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
-
-			DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
-
-			DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(DISPLAYNAME);
+			
+			DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT.getDisplayName());
 
 			RecipearLogger.debug("OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
 

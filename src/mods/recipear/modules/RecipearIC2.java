@@ -80,12 +80,12 @@ public class RecipearIC2 {
 						if(itemstack == null) continue;
 						if(itemstack.getDisplayName() == null) continue;
 						
-						String temp = RecipearUtil.getLanguageRegistryEntry(itemstack.getDisplayName());
-							
+						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack.getDisplayName()) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
+						
 						if(RECIPE_INPUT_DISPLAYNAME.equals("N/A")) {
-							RECIPE_INPUT_DISPLAYNAME = temp + "(" + recipe.getAmount() + ")";
+							RECIPE_INPUT_DISPLAYNAME = temp;
 						} else {
-							RECIPE_INPUT_DISPLAYNAME += ", " + temp + "(" + recipe.getAmount() + ")";
+							RECIPE_INPUT_DISPLAYNAME += ", " + temp;
 						}
 						
 						} catch (Exception ex) {

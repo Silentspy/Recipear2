@@ -40,7 +40,7 @@ public class Recipear
 		
 		RecipearLogger.info(supported_types);
 		
-		//RecipearConfig.debug = false;
+		//RecipearConfig.debug = true;
 		if(BannedRecipes.GetBannedRecipeAmount() > 0) {
 			long startTime = System.currentTimeMillis();
 			
