@@ -1,8 +1,7 @@
-Recipear
+[Recipear](http://www.minecraftforum.net/topic/1621605-)
 ==========
 
 ##Description
-
 Recipear's goal is to be able to remove every recipe in the game including from most of the forge mods
 
 ##Download & Installation
@@ -26,7 +25,7 @@ You can adjust the recipe removal in config/Recipear/BannedRecipes.cfg
 Disables the entirety of quantum suit from being crafted
 
 `ic2.itemDustIronSmall:OREWASHING` 
-Disables recipe for ore washer that output's this item
+Disables the ore washing recipe(s) related to that item
 
 `58:CRAFTING` 
 Disables "Crafting Table" from being crafted
