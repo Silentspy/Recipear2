@@ -34,7 +34,7 @@ public class BannedRecipe {
 		this.metadata = -1;
 		this.type = type;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -45,7 +45,7 @@ public class BannedRecipe {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

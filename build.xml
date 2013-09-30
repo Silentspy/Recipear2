@@ -19,7 +19,7 @@
 
 	<property name="mc.version" value="1.6.2"/>
 	<property name="forge.version" value="9.10.1.871"/>
-	<property name="ic2exp.version" value="200"/>
+	<property name="ic2exp.version" value="235"/>
 
 	<property name="recipear.version" value="2.0.2" />
 

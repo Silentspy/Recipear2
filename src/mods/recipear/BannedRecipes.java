@@ -26,10 +26,21 @@ public class BannedRecipes {
 	}
 
 	public static boolean Check(int ID, int METADATA, String TYPE) {
-
+		// this method will always check ITEMID no matter what (kinda obvious)
+		// Check if the BannedRecipe have ITEMID:METADATA(set):DEFAULT(not set)
 		BannedRecipe bannedrecipe = new BannedRecipe(ID, METADATA, "DEFAULT");
 		if(BannedRecipes.contains(bannedrecipe)) return true;
+		
+		// Check if the BannedRecipe have ITEMID:METADATA(set):TYPE(set)
+		bannedrecipe.type = TYPE;
+		if(BannedRecipes.contains(bannedrecipe)) return true;
+		
+		//Check if BannedRecipe have ITEMID:-1(not set):DEFAULT(not set)
+		bannedrecipe.type = "DEFAULT";
+		bannedrecipe.metadata = -1;
+		if(BannedRecipes.contains(bannedrecipe)) return true;
 
+		// Check if BannedRecipe have ITEMID:-1(not set):TYPE(set)
 		bannedrecipe.type = TYPE;
 		if(BannedRecipes.contains(bannedrecipe)) return true;
 

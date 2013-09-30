@@ -35,11 +35,13 @@ public class Recipear
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		String supported_types = "Supported TYPES are";
+		String supported_types = "Supported Recipe Types are";
 		
 		for(String type : BannedRecipes.getBannedRecipeTypes()) {
 			supported_types += " " + type;
 		}
+		
+		if(debug) RecipearConfig.debug = true;
 		
 		RecipearLogger.info(supported_types);
 		
