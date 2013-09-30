@@ -1,7 +1,5 @@
 [Recipear](http://www.minecraftforum.net/topic/1621605-)
 ==========
-
-##Description
 Recipear's goal is to be able to remove every recipe in the game including from most of the forge mods
 
 ##Download & Installation
@@ -12,32 +10,32 @@ put the mod in your mods folder and run the client/server at least once to get y
 
 ##Introduction
 
-You can adjust the recipe removal in config/Recipear/BannedRecipes.cfg
+You can adjust recipe removal in config/Recipear/BannedRecipes.cfg
 
-- `<ID>[:METADATA][:TYPE]` to remove item by id, `<>` is required and `[]` is optional
-- `<NAME>[:TYPE]` to remove item by name, `<>` is required and `[]` is optional
-- Every recipe ban needs to be seperated with a new line,
+- `<ID>[:METADATA][:TYPE]` to remove Recipe by id, `<>` is required and `[]` is optional
+- `<NAME>[:TYPE]` to remove Recipe by name, `<>` is required and `[]` is optional
+- Every recipe ban needs to be seperated with a new line
 - Comments can be started with #
 - Supported Recipes types is outputted in the log every startup
 - If you want to see how it all runs I would recommend turning debug on in the config at least once.
 
-`ic2.core.item.armor.ItemArmorQuantumSuit` 
-Disables the entirety of quantum suit from being crafted
+`itemArmorQuantumHelmet` 
+Disables the Quantum helmet(IC2) from being crafted
 
-`ic2.itemDustIronSmall:OREWASHING` 
-Disables the ore washing recipe(s) related to that item
+`itemDustIronSmall:OREWASHING` 
+Disables the ore washing recipe(s) related to "Small Pile of Iron Dust"
 
 `58:CRAFTING` 
 Disables "Crafting Table" from being crafted
 
-`325` 
+`325` or `item.bucket`
 Disables "Bucket" from being crafted
 
 `171:3:CRAFTING` 
 Disables "Light Blue Carpet" with 2 in metadata from being Crafted
 
 `Light Blue Wool:CRAFTING`
-Disables "Light Blue Wool" From being Crafted
+Disables "Light Blue Wool" from being Crafted
 
 ##Compile & Build
 
