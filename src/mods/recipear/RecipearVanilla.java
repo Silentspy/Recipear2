@@ -40,7 +40,7 @@ public class RecipearVanilla {
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
 			
-			DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT.getDisplayName());
+			DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT.getUnlocalizedName());
 
 			RecipearLogger.debug("OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
 
@@ -81,7 +81,7 @@ public class RecipearVanilla {
 			NBTTAGSCOUNT = 0;
 			ITEMID = RECIPE_OUTPUT.itemID;
 			METADATA = RECIPE_OUTPUT.getItemDamage();
-			DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
+			DISPLAYNAME = RECIPE_OUTPUT.getUnlocalizedName();
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
 
@@ -105,7 +105,7 @@ public class RecipearVanilla {
 			NBTTAGSCOUNT = 0;
 			ITEMID = RECIPE_OUTPUT.itemID;
 			METADATA = RECIPE_OUTPUT.getItemDamage();
-			DISPLAYNAME = RECIPE_OUTPUT.getDisplayName();
+			DISPLAYNAME = RECIPE_OUTPUT.getUnlocalizedName();
 			if(RECIPE_OUTPUT.getTagCompound() != null)
 				NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
 			

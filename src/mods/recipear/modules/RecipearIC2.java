@@ -79,9 +79,9 @@ public class RecipearIC2 {
 						try {
 						
 						if(itemstack == null) continue;
-						if(itemstack.getDisplayName() == null) continue;
+						if(itemstack.getUnlocalizedName() == null) continue;
 						
-						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack.getDisplayName()) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
+						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack.getUnlocalizedName()) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
 
 						RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
 						
@@ -112,7 +112,7 @@ public class RecipearIC2 {
 						NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
 					
 					try {
-						DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT.getDisplayName());
+						DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT.getUnlocalizedName());
 					} catch (Exception ex) {
 						RecipearLogger.warning("[IC2] Failed to fetch name for " + ITEMID + ":" + METADATA);
 					}
