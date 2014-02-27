@@ -1,6 +1,11 @@
 package mods.recipear;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class BannedRecipes {
 	private static ArrayList<BannedRecipe> BannedRecipes = new ArrayList<BannedRecipe>();
@@ -8,6 +13,10 @@ public class BannedRecipes {
 
 	public static ArrayList<String> getBannedRecipeTypes() {
 		return BannedRecipeTypes;
+	}
+	
+	public static void setBannedRecipes(ArrayList<BannedRecipe> bannedRecipes) {
+		BannedRecipes = bannedRecipes;
 	}
 
 	public static ArrayList<BannedRecipe> getBannedRecipes() {
@@ -98,6 +107,30 @@ public class BannedRecipes {
 		for(String type : types){
 			BannedRecipeTypes.add(type);
 		}
+	}
+	
+	public static Packet250CustomPayload getPacket() {
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		ObjectOutputStream data = null;
+		try {
+			data = new ObjectOutputStream(bytes);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+        try {
+			data.writeObject(getBannedRecipes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "recipear";
+		packet.data = bytes.toByteArray();
+		packet.length = bytes.size();
+		
+		return packet;
 	}
 }
 

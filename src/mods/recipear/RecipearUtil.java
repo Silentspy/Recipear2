@@ -1,5 +1,7 @@
 package mods.recipear;
 
+import ic2.core.AdvRecipe;
+import ic2.core.AdvShapelessRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -10,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -21,10 +24,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 public class RecipearUtil {
 
 	public static boolean isOP(EntityPlayer player) {
-		return (MinecraftServer.getServer().getServerOwner() == player.username) ? true
-				: (MinecraftServer.getServer().getConfigurationManager()
-						.getOps().contains(player.username.toLowerCase()) ? true
-								: false);
+		return (MinecraftServer.getServer().getConfigurationManager().getOps().contains(player.username.toLowerCase()) ? true : false);
 	}
 
 	public static ItemStack[] concat(ItemStack[] A, ItemStack[] B) {
@@ -48,9 +48,8 @@ public class RecipearUtil {
 			output.stackTagCompound.setCompoundTag("display", new NBTTagCompound());
 		}
 
-		String ChatSpecial = "\u00A7";
-		String name = EnumChatFormatting.RESET + RecipearConfig.placeholderName.replace("$", ChatSpecial) + EnumChatFormatting.RESET;
-		String description = EnumChatFormatting.RESET + RecipearConfig.placeholderDescription.replace("$", ChatSpecial) + EnumChatFormatting.RESET;
+		String name = EnumChatFormatting.RESET + RecipearConfig.placeholderName.replace("$", "\u00A7") + EnumChatFormatting.RESET;
+		String description = EnumChatFormatting.RESET + RecipearConfig.placeholderDescription.replace("$", "\u00A7") + EnumChatFormatting.RESET;
 
 
 		NBTTagList description_list = new NBTTagList();
@@ -74,26 +73,25 @@ public class RecipearUtil {
 		} else if (iRecipe instanceof ShapedOreRecipe) {
 			ReflectionHelper.setPrivateValue(ShapedOreRecipe.class,
 					(ShapedOreRecipe) iRecipe, output, "output");
-		} else if ((Loader.isModLoaded("IC2")) && (iRecipe instanceof ic2.core.AdvRecipe)) {
-			((ic2.core.AdvRecipe)iRecipe).output = output; 
-		} else if ((Loader.isModLoaded("IC2")) && (iRecipe instanceof ic2.core.AdvShapelessRecipe)) { 
-			((ic2.core.AdvShapelessRecipe)iRecipe).output = output; 
+		} else if ((Loader.isModLoaded("IC2")) && (iRecipe instanceof AdvRecipe)) {
+			ReflectionHelper.setPrivateValue(AdvRecipe.class,
+					(AdvRecipe) iRecipe, output, "output");
+		} else if ((Loader.isModLoaded("IC2")) && (iRecipe instanceof AdvShapelessRecipe)) { 
+			ReflectionHelper.setPrivateValue(AdvShapelessRecipe.class,
+					(AdvShapelessRecipe) iRecipe, output, "output");
 		}
 	}
 
-	public static String getLanguageRegistryEntry (String entry) {
+	public static String getLanguageRegistryEntry (ItemStack itemstack) {
+		String name = null;
+		try { 
+			name = itemstack.getUnlocalizedName(); 
+		} 
+		catch (Exception ex) { 
+			return "Unknown";
+		}
 		
-		if(entry == null) return "Unknown";
-		
-		return entry;
-		
-		/*
-		if(Recipear.server) return entry; 
-		
-		if(LanguageRegistry.instance().getStringLocalization(entry).length() > 0)
-			entry = LanguageRegistry.instance().getStringLocalization(entry);
-		
-		return entry; */
+		return name;
 	}
 
 	public static boolean isInteger(String s) {
@@ -106,5 +104,34 @@ public class RecipearUtil {
 			return false; 
 		}
 		return true;
+	}
+	
+	public static void RemoveBannedItemsFromInventory(EntityPlayer player) {
+
+		if (!isOP(player) && RecipearConfig.removeIngame && (BannedRecipes.GetBannedRecipeAmount() > 0)) {
+
+			ItemStack[] whole_inventory = concat(
+					player.inventory.mainInventory,
+					player.inventory.armorInventory);
+
+			for (ItemStack RECIPE_OUTPUT : whole_inventory) {
+				if (RECIPE_OUTPUT != null) 
+				{
+					String DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
+
+					if (BannedRecipes.Check(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage(), "INVENTORY") || BannedRecipes.Check(DISPLAYNAME, "INVENTORY"))
+					{
+						msgPlayer(player, String.format(RecipearConfig.removeIngameMsg.replace("$", "\u00A7"), DISPLAYNAME));
+						player.inventory.clearInventory(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage());
+					}
+				}
+			}
+
+			whole_inventory = null;
+		}
+	}
+	
+	public static void msgPlayer(EntityPlayer player, String msg) {
+		player.sendChatToPlayer(new ChatMessageComponent().createFromText(msg.replace("$", "\u00A7")));
 	}
 }

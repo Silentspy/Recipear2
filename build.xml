@@ -17,14 +17,14 @@
 
 	<property name="mcpsrc.dir" value="${mcp.dir}/src"/>
 
-	<property name="mc.version" value="1.6.2"/>
-	<property name="forge.version" value="9.10.1.871"/>
-	<property name="ic2exp.version" value="235"/>
+	<property name="mc.version" value="1.6.4"/>
+	<property name="forge.version" value="9.11.1.965"/>
+	<property name="ic2exp.version" value="409"/>
 
-	<property name="recipear.version" value="2.0.3" />
+	<property name="recipear.version" value="2.1.0" />
 
-	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
-	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.${ic2exp.version}-experimental.jar"/>
+	<property name="forge.name" value="forge-${mc.version}-${forge.version}-src.zip"/>
+	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.1.${ic2exp.version}-experimental.jar"/>
 	<property name="ic2.url" value="http://ic2api.player.to:8080/job/IC2_experimental/${ic2exp.version}/artifact/packages/"/>
 
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
@@ -80,7 +80,7 @@
 
 	<!-- Download forge (if it doesn't exist) -->
 	<target name="download-forge" unless="forge-exists">
-		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+		<get src="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${mc.version}-${forge.version}/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
 
 	<!-- Download IC2 unless it exists -->
@@ -184,7 +184,7 @@
 		</copy>
 
 		<!-- Reset src dir to post-forge-install state -->
-		<delete dir="${mcpsrc.dir}/minecraft/recipear"/>
+		<delete dir="${mcpsrc.dir}/minecraft/mods"/>
 		<delete dir="${mcpsrc.dir}/minecraft/ic2"/>
 		<delete dir="${distribute.dir}"/>
 		<mkdir dir="${distribute.dir}"/>

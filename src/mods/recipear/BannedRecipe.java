@@ -1,6 +1,8 @@
 package mods.recipear;
 
-public class BannedRecipe {
+import java.io.Serializable;
+
+public class BannedRecipe implements Serializable{
 	int id, metadata;
 	String name, type;
 

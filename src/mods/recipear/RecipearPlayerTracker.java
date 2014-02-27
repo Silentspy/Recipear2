@@ -1,14 +1,16 @@
 package mods.recipear;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.common.IPlayerTracker;
 
-public class RecipearPlayerEvent implements IPlayerTracker {
+public class RecipearPlayerTracker implements IPlayerTracker {
 
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		Recipear.RemoveBannedItemsFromInventory(player);
+			EntityPlayerMP player_mp = (EntityPlayerMP) player;
+			RecipearUtil.RemoveBannedItemsFromInventory(player_mp);
 	}
 
 	@Override

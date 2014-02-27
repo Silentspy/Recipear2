@@ -2,44 +2,48 @@ package mods.recipear;
 
 import java.util.logging.Logger;
 
+import mods.recipear.api.RecipearEvent;
+import net.minecraft.logging.ILogAgent;
+
 public class RecipearLogger {
 
-	private static Logger logger;
+	private static ILogAgent logger;
 
 	public static void info(String message) 
 	{
-		logger.info(message);
+		logger.logInfo(message);
 	}
 
-	public static void debug(String message) 
+	public static void debug(String message, RecipearEvent event) 
 	{
-		if(Recipear.outputting)
-			RecipearCommandLog.AddLogEntry(message);
-		else
-			if(RecipearConfig.debug) logger.info("[DEBUG] " + message);
+		if(RecipearConfig.debug) {
+			logger.logInfo("[DEBUG] " + message);
+		} else if(!event.isModify()) {
+			logger.logInfo("[OUTPUT] " + message);
+		}
 	}
 
 	public static void severe(String message)
 	{
-		logger.severe(message);
+		logger.logSevere(message);
 	}
 
 	public static void warning(String message)
 	{
-		logger.warning(message);
+		logger.logWarning(message);
 	}
 
 	/**
 	 * @return the logger
 	 */
-	public static Logger getLogger() {
+	public static ILogAgent getLogger() {
 		return logger;
 	}
 
 	/**
 	 * @param logger the logger to set
 	 */
-	public static void setLogger(Logger logger) {
+	public static void setLogger(ILogAgent logger) {
 		RecipearLogger.logger = logger;
 	}
 }

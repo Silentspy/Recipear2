@@ -17,7 +17,7 @@ public class RecipearPlayerTick implements IScheduledTickHandler{
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		Recipear.RemoveBannedItemsFromInventory((EntityPlayer)tickData[0]);
+		RecipearUtil.RemoveBannedItemsFromInventory((EntityPlayer)tickData[0]);
 	}
 
 	@Override
@@ -32,6 +32,10 @@ public class RecipearPlayerTick implements IScheduledTickHandler{
 
 	@Override
 	public int nextTickSpacing() {
-		return 20*RecipearConfig.removeingameinterval;
+		if(RecipearConfig.removeIngameInterval >= 10) {
+			return 20*RecipearConfig.removeIngameInterval;
+		} else {
+			return 20*60;
+		}
 	}
 }

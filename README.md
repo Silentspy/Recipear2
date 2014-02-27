@@ -1,10 +1,10 @@
-[Recipear](http://www.minecraftforum.net/topic/1621605-)
+[![image](resources/recipear.png)](http://www.minecraftforum.net/topic/1621605-)
 ==========
 Recipear's goal is to be able to remove every recipe in the game including from most of the forge mods
 
 ##Download & Installation
 
-you can get the latest builds @ http://ci.fragwith.us/
+you can get the latest builds @ http://ci.fragwith.us/job/Recipear2/
 
 put the mod in your mods folder and run the client/server at least once to get your configs all set up
 
@@ -18,6 +18,7 @@ You can adjust recipe removal in config/Recipear/BannedRecipes.cfg
 - Comments can be started with #
 - Supported Recipes types is outputted in the log every startup
 - If you want to see how it all runs I would recommend turning debug on in the config at least once.
+- (2.0.4+) you can remove items by name with a ":" limiter, but you need to escape it with a "\" character, example being `tile.ironchest\:CRYSTAL`
 
 `itemArmorQuantumHelmet` 
 Disables the Quantum helmet(IC2) from being crafted
@@ -34,7 +35,7 @@ Disables "Bucket" from being crafted
 `171:3:CRAFTING` 
 Disables "Light Blue Carpet" with 2 in metadata from being Crafted
 
-`Light Blue Wool:CRAFTING`
+`tile.cloth.lightBlue:CRAFTING`
 Disables "Light Blue Wool" from being Crafted
 
 ##Compile & Build

@@ -11,6 +11,8 @@ import mods.recipear.BannedRecipes;
 import mods.recipear.Recipear;
 import mods.recipear.RecipearLogger;
 import mods.recipear.RecipearUtil;
+import mods.recipear.api.IRecipear;
+import mods.recipear.api.RecipearEvent;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -18,31 +20,29 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "Recipear2|IC2", name = "IC2", version = "1.0", dependencies="required-after:Recipear2@[2.0,)")
-public class RecipearIC2 {
+@Mod(modid = "Recipear2|IC2", name = "IC2", version = "1.0", dependencies="required-after:Recipear2@[2.1,)")
+public class RecipearIC2 implements IRecipear{
 
 	private boolean ic2 = false;
-
+	
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) 
+	public void postInit(FMLPostInitializationEvent event) 
 	{
-		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING");
+		Recipear.recipeEvents.add(this);
 	}
-
-	@EventHandler
-	public void PostInit(FMLPostInitializationEvent event) 
-	{
+	
+	public void trigger(RecipearEvent event) {
 		ic2 = Loader.isModLoaded("IC2");
 
 		if(ic2) {
 			if(BannedRecipes.GetBannedRecipeAmount() > 0) {
 				long startTime = System.currentTimeMillis();
 				RecipearLogger.info("[IC2] Starting in " + event.getSide().toString() + " Mode");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE")  + " CENTRIFUGE recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR")  + " COMPRESSOR recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR")  + " EXTRACTOR recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR")  + " MACERATOR recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING")  + " OREWASHING recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event)  + " CENTRIFUGE recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event)  + " COMPRESSOR recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event)  + " EXTRACTOR recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event)  + " MACERATOR recipe(s)");
+				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event)  + " OREWASHING recipe(s)");
 				RecipearLogger.info("[IC2] Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 			}
 		} else {
@@ -50,7 +50,13 @@ public class RecipearIC2 {
 		}
 	}
 
-	public int RemoveFromMachines(Map recipes, String machine) {
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) 
+	{
+		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING");
+	}
+
+	public int RemoveFromMachines(Map recipes, String machine, RecipearEvent event) {
 		int countRemoved = 0;
 		int countChecked = 0;
 		{
@@ -81,7 +87,7 @@ public class RecipearIC2 {
 						if(itemstack == null) continue;
 						if(itemstack.getUnlocalizedName() == null) continue;
 						
-						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack.getUnlocalizedName()) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
+						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
 
 						RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
 						
@@ -91,20 +97,16 @@ public class RecipearIC2 {
 					}
 				}
 
-				//List<ItemStack> RECIPE_OUTPUT_FOUND = new ArrayList<ItemStack>();
-				//List<ItemStack> RECIPE_OUTPUT_OLD = new ArrayList<ItemStack>();
-
-				RecipearLogger.debug("[IC2] INPUT: " + RECIPE_INPUT_DISPLAYNAME);
+				RecipearLogger.debug("[IC2] INPUT: " + RECIPE_INPUT_DISPLAYNAME, event);
 
 				boolean found = false;
 
 				for(Iterator<ItemStack> items_itr  = RECIPE_OUTPUT_RAW.items.iterator(); items_itr.hasNext();) {
 					RECIPE_OUTPUT = items_itr.next();
 
-					if (RECIPE_OUTPUT == null) 
+					if (RECIPE_OUTPUT == null) {
 						continue;
-
-					//RECIPE_OUTPUT_OLD.add(RECIPE_OUTPUT);
+					}
 
 					ITEMID = RECIPE_OUTPUT.itemID;
 					METADATA = RECIPE_OUTPUT.getItemDamage();
@@ -112,17 +114,16 @@ public class RecipearIC2 {
 						NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
 					
 					try {
-						DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT.getUnlocalizedName());
+						DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
 					} catch (Exception ex) {
 						RecipearLogger.warning("[IC2] Failed to fetch name for " + ITEMID + ":" + METADATA);
 					}
 						
-					RecipearLogger.debug("[IC2] OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT);
+					RecipearLogger.debug("[IC2] OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT, event);
 
-					if((!Recipear.outputting) && BannedRecipes.Check(ITEMID, METADATA, machine) || 
+					if(event.isModify() && BannedRecipes.Check(ITEMID, METADATA, machine) || 
 							BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), machine)) {
 						RecipearLogger.info("[IC2] Removing entry(" + RECIPE_INPUT_DISPLAYNAME + ") to craft: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
-						//RECIPE_OUTPUT_FOUND.add(RECIPE_OUTPUT);
 						found = true;
 						countRemoved++;
 					}
@@ -131,8 +132,6 @@ public class RecipearIC2 {
 				countChecked++;
 
 				if(found) {
-					//RECIPE_OUTPUT_OLD.removeAll(RECIPE_OUTPUT_FOUND);
-					//RECIPE_OUTPUT_RAW.items = RECIPE_OUTPUT_OLD;
 					itr.remove();
 				}
 				
