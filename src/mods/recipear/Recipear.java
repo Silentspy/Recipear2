@@ -54,7 +54,7 @@ public class Recipear
 		String date = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
 		
 		BannedRecipes.AddBannedRecipeType("CRAFTING","FURNACE","INVENTORY");
-		RecipearLogger.setLogger(new LogAgent("Recipear", "", (new File(event.getModConfigurationDirectory().getParentFile(), "Recipear-" + date + ".log")).getAbsolutePath()));
+		RecipearLogger.setLogger(new LogAgent("Recipear", "", (new File(event.getModConfigurationDirectory().getParentFile(), "Recipear.log")).getAbsolutePath()));
 		recipearconfig = new RecipearConfig(event);
 	}
 
