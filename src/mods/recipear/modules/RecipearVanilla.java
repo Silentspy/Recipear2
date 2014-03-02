@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import mods.recipear.BannedRecipes;
-import mods.recipear.Recipear;
 import mods.recipear.RecipearConfig;
 import mods.recipear.RecipearLogger;
 import mods.recipear.RecipearUtil;

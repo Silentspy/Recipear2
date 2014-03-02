@@ -22,8 +22,8 @@ public class RecipearConfig {
 	public static String placeholderName = "$cBanned Recipe";
 	public static String placeholderDescription = "$eThis item has been disabled by the server";
 	public static File recipearDataFolder;
-
-	public RecipearConfig(FMLPreInitializationEvent event) 
+	
+	public static void init(FMLPreInitializationEvent event) 
 	{
 		recipearDataFolder = new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Recipear");
 		recipearDataFolder.mkdir();

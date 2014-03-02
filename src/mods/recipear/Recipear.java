@@ -45,7 +45,7 @@ public class Recipear
 	@SidedProxy(clientSide="mods.recipear.RecipearClientProxy", serverSide="mods.recipear.RecipearCommonProxy")
 	public static RecipearCommonProxy proxy;
 	
-	public static RecipearConfig recipearconfig;
+	public static RecipearConfig recipearconfig = null;
 	
 
 	@EventHandler
@@ -55,7 +55,8 @@ public class Recipear
 		
 		BannedRecipes.AddBannedRecipeType("CRAFTING","FURNACE","INVENTORY");
 		RecipearLogger.setLogger(new LogAgent("Recipear", "", (new File(event.getModConfigurationDirectory().getParentFile(), "Recipear.log")).getAbsolutePath()));
-		recipearconfig = new RecipearConfig(event);
+		recipearconfig = new RecipearConfig();
+		recipearconfig.init(event);
 	}
 
 	@EventHandler
@@ -68,7 +69,9 @@ public class Recipear
 			supported_types += " " + type;
 		}
 		
-		if(debug) RecipearConfig.debug = true;
+		if(debug) {
+			RecipearConfig.debug = true;
+		}
 		RecipearLogger.info(supported_types);
 		
 		recipeEvents.add(new RecipearVanilla());

@@ -22,8 +22,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = "Recipear2|IC2", name = "IC2", version = "1.0", dependencies="required-after:Recipear2@[2.1,)")
 public class RecipearIC2 implements IRecipear{
-
-	private boolean ic2 = false;
+	
+	String modid = "IC2";
+	String prefix = "[" + modid + "] ";
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
@@ -32,21 +33,20 @@ public class RecipearIC2 implements IRecipear{
 	}
 	
 	public void trigger(RecipearEvent event) {
-		ic2 = Loader.isModLoaded("IC2");
-
-		if(ic2) {
+		
+		if(Loader.isModLoaded(modid)) {
 			if(BannedRecipes.GetBannedRecipeAmount() > 0) {
 				long startTime = System.currentTimeMillis();
-				RecipearLogger.info("[IC2] Starting in " + event.getSide().toString() + " Mode");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event)  + " CENTRIFUGE recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event)  + " COMPRESSOR recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event)  + " EXTRACTOR recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event)  + " MACERATOR recipe(s)");
-				RecipearLogger.info("[IC2] Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event)  + " OREWASHING recipe(s)");
-				RecipearLogger.info("[IC2] Finished in " + (System.currentTimeMillis() - startTime) + "ms");
+				RecipearLogger.info(prefix + "Starting in " + event.getSide().toString() + " Mode");
+				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event)  + " CENTRIFUGE recipe(s)");
+				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event)  + " COMPRESSOR recipe(s)");
+				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event)  + " EXTRACTOR recipe(s)");
+				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event)  + " MACERATOR recipe(s)");
+				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event)  + " OREWASHING recipe(s)");
+				RecipearLogger.info(prefix + "Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 			}
 		} else {
-			RecipearLogger.info("[IC2] Could not find IC2");
+			RecipearLogger.info(prefix + "Could not find " + modid);
 		}
 	}
 
@@ -62,10 +62,10 @@ public class RecipearIC2 implements IRecipear{
 		{
 			int NBTTAGSCOUNT = 0, ITEMID, METADATA;
 			String DISPLAYNAME = "Unknown";
-			RecipeOutput RECIPE_OUTPUT_RAW, RECIPE_OUTPUT_NEW;
-			ItemStack RECIPE_OUTPUT;
+			RecipeOutput RECIPE_OUTPUT_RAW = null, RECIPE_OUTPUT_NEW = null;
+			ItemStack RECIPE_OUTPUT = null;
 
-			RecipearLogger.info("[IC2] Scanning through " + recipes.size() + " recipe(s) for " + machine);
+			RecipearLogger.info(prefix + "Scanning through " + recipes.size() + " recipe(s) for " + machine);
 			
 			for (Iterator itr = recipes.entrySet().iterator(); itr.hasNext();) {
 				try {
@@ -92,12 +92,12 @@ public class RecipearIC2 implements IRecipear{
 						RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
 						
 						} catch (Exception ex) {
-							RecipearLogger.warning("[IC2] Failed to fetch name for " + itemstack.itemID + ":" + itemstack.getItemDamage());
+							RecipearLogger.warning(prefix + "Failed to fetch name for " + itemstack.itemID + ":" + itemstack.getItemDamage());
 						}
 					}
 				}
 
-				RecipearLogger.debug("[IC2] INPUT: " + RECIPE_INPUT_DISPLAYNAME, event);
+				RecipearLogger.debug(prefix + "INPUT: " + RECIPE_INPUT_DISPLAYNAME, event);
 
 				boolean found = false;
 
@@ -116,14 +116,14 @@ public class RecipearIC2 implements IRecipear{
 					try {
 						DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
 					} catch (Exception ex) {
-						RecipearLogger.warning("[IC2] Failed to fetch name for " + ITEMID + ":" + METADATA);
+						RecipearLogger.warning(prefix + "Failed to fetch name for " + ITEMID + ":" + METADATA);
 					}
 						
-					RecipearLogger.debug("[IC2] OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT, event);
+					RecipearLogger.debug(prefix + "OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT, event);
 
 					if(event.isModify() && BannedRecipes.Check(ITEMID, METADATA, machine) || 
 							BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), machine)) {
-						RecipearLogger.info("[IC2] Removing entry(" + RECIPE_INPUT_DISPLAYNAME + ") to craft: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
+						RecipearLogger.info(prefix + "Removing entry(" + RECIPE_INPUT_DISPLAYNAME + ") to craft: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
 						found = true;
 						countRemoved++;
 					}
