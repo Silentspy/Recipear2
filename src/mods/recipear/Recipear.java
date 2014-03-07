@@ -44,10 +44,8 @@ public class Recipear
 	
 	@SidedProxy(clientSide="mods.recipear.RecipearClientProxy", serverSide="mods.recipear.RecipearCommonProxy")
 	public static RecipearCommonProxy proxy;
+	public static RecipearConfig recipearconfig;
 	
-	public static RecipearConfig recipearconfig = null;
-	
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
