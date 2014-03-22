@@ -38,7 +38,7 @@ Disables "Light Blue Carpet" with 2 in metadata from being Crafted
 `tile.cloth.lightBlue:CRAFTING`
 Disables "Light Blue Wool" from being Crafted
 
-##Introduction
+##Commands
 
 - /recipear
   - **reload** will reload config and send out update to players
