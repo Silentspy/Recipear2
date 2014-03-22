@@ -40,7 +40,7 @@ Disables "Light Blue Wool" from being Crafted
 
 ##Commands
 
-- /recipear
+- /recipear (OP only)
   - **reload** will reload config and send out update to players
   - **output** outputs recipe list to *Recipear-output.log*
 
