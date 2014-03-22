@@ -38,7 +38,7 @@ public class RecipearConfig {
 
 	private static void Properties() 
 	{
-		RecipearLogger.info("loading Recipear" + File.separator + "Core.cfg");
+		RecipearLogger.info("Loading Recipear" + File.separator + "Core.cfg");
 		Configuration cfg = new Configuration(new File(recipearDataFolder + File.separator + "Core.cfg"));
 		try
 		{
@@ -64,7 +64,7 @@ public class RecipearConfig {
 	private static void BannedRecipesProperties() {
 		try
 		{
-			RecipearLogger.info("loading Recipear" + File.separator + "BannedRecipes.cfg");
+			RecipearLogger.info("Loading Recipear" + File.separator + "BannedRecipes.cfg");
 			File file = new File(recipearDataFolder + File.separator + "BannedRecipes.cfg");
 			String comment = "# Check out https://github.com/Silentspy/Recipear2#introduction\r\n"
 					+ "# for up-to-date examples and introduction\r\n";

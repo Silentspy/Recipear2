@@ -6,7 +6,7 @@ Recipear's goal is to be able to remove every recipe in the game including from 
 
 you can get the latest builds @ http://ci.fragwith.us/job/Recipear2/
 
-put the mod in your mods folder and run the client/server at least once to get your configs all set up
+put the mod in your mods folder and run the server at least once to get your configs all set up
 
 ##Introduction
 
@@ -23,7 +23,7 @@ You can adjust recipe removal in config/Recipear/BannedRecipes.cfg
 `itemArmorQuantumHelmet` 
 Disables the Quantum helmet(IC2) from being crafted
 
-`itemDustIronSmall:OREWASHING` 
+`ic2.itemDustIronSmall:OREWASHING` 
 Disables the ore washing recipe(s) related to "Small Pile of Iron Dust"
 
 `58:CRAFTING` 
@@ -37,6 +37,12 @@ Disables "Light Blue Carpet" with 2 in metadata from being Crafted
 
 `tile.cloth.lightBlue:CRAFTING`
 Disables "Light Blue Wool" from being Crafted
+
+##Introduction
+
+- /recipear
+  - **reload** will reload config and send out update to players
+  - **output** outputs recipe list to *Recipear-output.log*
 
 ##Compile & Build
 

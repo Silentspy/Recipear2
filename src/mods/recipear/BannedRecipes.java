@@ -108,30 +108,6 @@ public class BannedRecipes {
 			BannedRecipeTypes.add(type);
 		}
 	}
-	
-	public static Packet250CustomPayload getPacket() {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		ObjectOutputStream data = null;
-		try {
-			data = new ObjectOutputStream(bytes);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-        try {
-			data.writeObject(getBannedRecipes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "recipear";
-		packet.data = bytes.toByteArray();
-		packet.length = bytes.size();
-		
-		return packet;
-	}
 }
 
 

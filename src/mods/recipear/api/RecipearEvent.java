@@ -1,17 +1,20 @@
 package mods.recipear.api;
 
+import java.util.ArrayList;
+
+import mods.recipear.BannedRecipe;
 import cpw.mods.fml.relauncher.Side;
 
 public class RecipearEvent{
 	
 	Side side;
 	boolean server;
-	boolean modify;
-	
-	public RecipearEvent(Side side, boolean modify) {
+	boolean output;
+
+	public RecipearEvent(Side side, boolean output) {
 		this.side = side;
 		this.server = (side.equals(Side.SERVER)) ? true : false;
-		this.modify = modify;
+		this.output = output;
 	}
 
 	/**
@@ -31,7 +34,7 @@ public class RecipearEvent{
 	/**
 	 * @return the modify
 	 */
-	public boolean isModify() {
-		return modify;
+	public boolean isOutput() {
+		return output;
 	}
 }

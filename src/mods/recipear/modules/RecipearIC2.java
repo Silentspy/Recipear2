@@ -10,6 +10,7 @@ import java.util.Map;
 import mods.recipear.BannedRecipes;
 import mods.recipear.Recipear;
 import mods.recipear.RecipearLogger;
+import mods.recipear.RecipearOutput;
 import mods.recipear.RecipearUtil;
 import mods.recipear.api.IRecipear;
 import mods.recipear.api.RecipearEvent;
@@ -29,13 +30,23 @@ public class RecipearIC2 implements IRecipear{
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		Recipear.recipeEvents.add(this);
+		Recipear.events.add(this);
 	}
 	
 	public void trigger(RecipearEvent event) {
 		
-		if(Loader.isModLoaded(modid)) {
-			if(BannedRecipes.GetBannedRecipeAmount() > 0) {
+		if(Loader.isModLoaded(modid)) 
+		{
+			if(event.isOutput()) 
+			{
+				RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event);
+				RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event);
+				RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event);
+				RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event);
+				RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event);
+			} 
+			else if(BannedRecipes.GetBannedRecipeAmount() > 0) 
+			{
 				long startTime = System.currentTimeMillis();
 				RecipearLogger.info(prefix + "Starting in " + event.getSide().toString() + " Mode");
 				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event)  + " CENTRIFUGE recipe(s)");
@@ -45,7 +56,9 @@ public class RecipearIC2 implements IRecipear{
 				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event)  + " OREWASHING recipe(s)");
 				RecipearLogger.info(prefix + "Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 			}
-		} else {
+		}
+		else 
+		{
 			RecipearLogger.info(prefix + "Could not find " + modid);
 		}
 	}
@@ -56,90 +69,107 @@ public class RecipearIC2 implements IRecipear{
 		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING");
 	}
 
-	public int RemoveFromMachines(Map recipes, String machine, RecipearEvent event) {
-		int countRemoved = 0;
-		int countChecked = 0;
-		{
-			int NBTTAGSCOUNT = 0, ITEMID, METADATA;
-			String DISPLAYNAME = "Unknown";
-			RecipeOutput RECIPE_OUTPUT_RAW = null, RECIPE_OUTPUT_NEW = null;
-			ItemStack RECIPE_OUTPUT = null;
-
+	public int RemoveFromMachines(Map recipes, String machine, RecipearEvent event) 
+	{
+		if(event.isOutput()) {
+			RecipearOutput.add("-- " + machine + " --");
+		} else {
 			RecipearLogger.info(prefix + "Scanning through " + recipes.size() + " recipe(s) for " + machine);
+		}
+		
+		int countRemoved = 0, index = 0, NBTTAGSCOUNT = 0, ITEMID, METADATA;
+		String DISPLAYNAME = "Unknown";
+		RecipeOutput RECIPE_OUTPUT_RAW = null, RECIPE_OUTPUT_NEW = null;
+		ItemStack RECIPE_OUTPUT = null;
+		
+		for (Iterator itr = recipes.entrySet().iterator(); itr.hasNext();) {
+			try {
+			Map.Entry entry = (Map.Entry) itr.next();
+			Object RECIPE_INPUT_RAW = (Object) entry.getKey();
+			RECIPE_OUTPUT_RAW = (RecipeOutput) entry.getValue();
 			
-			for (Iterator itr = recipes.entrySet().iterator(); itr.hasNext();) {
-				try {
-				Map.Entry entry = (Map.Entry) itr.next();
-				Object RECIPE_INPUT_RAW = (Object) entry.getKey();
-				RECIPE_OUTPUT_RAW = (RecipeOutput) entry.getValue();
-				if(RECIPE_INPUT_RAW == null) continue;
-				if(RECIPE_OUTPUT_RAW == null) continue;
+			if(RECIPE_INPUT_RAW == null) { 
+				continue;
+			}
+			
+			if(RECIPE_OUTPUT_RAW == null) {
+				continue;
+			}
 
-				String RECIPE_INPUT_DISPLAYNAME = "N/A";
+			String RECIPE_INPUT_DISPLAYNAME = "N/A";
 
-				if(RECIPE_INPUT_RAW instanceof IRecipeInput) {
-					IRecipeInput recipe = (IRecipeInput)RECIPE_INPUT_RAW;
-					
-					for(ItemStack itemstack : recipe.getInputs()) {
-						
-						try {
-						
-						if(itemstack == null) continue;
-						if(itemstack.getUnlocalizedName() == null) continue;
-						
-						String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
-
-						RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
-						
-						} catch (Exception ex) {
-							RecipearLogger.warning(prefix + "Failed to fetch name for " + itemstack.itemID + ":" + itemstack.getItemDamage());
-						}
-					}
-				}
-
-				RecipearLogger.debug(prefix + "INPUT: " + RECIPE_INPUT_DISPLAYNAME, event);
-
-				boolean found = false;
-
-				for(Iterator<ItemStack> items_itr  = RECIPE_OUTPUT_RAW.items.iterator(); items_itr.hasNext();) {
-					RECIPE_OUTPUT = items_itr.next();
-
-					if (RECIPE_OUTPUT == null) {
-						continue;
-					}
-
-					ITEMID = RECIPE_OUTPUT.itemID;
-					METADATA = RECIPE_OUTPUT.getItemDamage();
-					if(RECIPE_OUTPUT.getTagCompound() != null)
-						NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
+			if(RECIPE_INPUT_RAW instanceof IRecipeInput) {
+				IRecipeInput recipe = (IRecipeInput)RECIPE_INPUT_RAW;
+				
+				for(ItemStack itemstack : recipe.getInputs()) {
 					
 					try {
-						DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
-					} catch (Exception ex) {
-						RecipearLogger.warning(prefix + "Failed to fetch name for " + ITEMID + ":" + METADATA);
+					
+					if(itemstack == null) {
+						continue;
 					}
-						
-					RecipearLogger.debug(prefix + "OUTPUT: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT, event);
+					
+					if(itemstack.getUnlocalizedName() == null) {
+						continue;
+					}
+					
+					String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
 
-					if(event.isModify() && BannedRecipes.Check(ITEMID, METADATA, machine) || 
+					RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
+					
+					} catch (Exception ex) {
+						RecipearLogger.warning(prefix + "Failed to fetch name for " + itemstack.itemID + ":" + itemstack.getItemDamage());
+					}
+				}
+			}
+
+			if(!event.isOutput()) {
+				RecipearLogger.debug(prefix + "INPUT: " + RECIPE_INPUT_DISPLAYNAME);
+			}
+			
+			boolean found = false;
+
+			for(Iterator<ItemStack> items_itr  = RECIPE_OUTPUT_RAW.items.iterator(); items_itr.hasNext();) {
+				RECIPE_OUTPUT = items_itr.next();
+
+				if (RECIPE_OUTPUT == null) {
+					continue;
+				}
+
+				ITEMID = RECIPE_OUTPUT.itemID;
+				METADATA = RECIPE_OUTPUT.getItemDamage();
+				if(RECIPE_OUTPUT.getTagCompound() != null) {
+					NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
+				}
+				
+				try {
+					DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
+				} catch (Exception ex) {
+					RecipearLogger.warning(prefix + "Failed to fetch name for " + ITEMID + ":" + METADATA);
+				}
+				
+				if(event.isOutput()) {
+					RecipearOutput.add(prefix + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT + ", INDEX: " + index);
+				} else {
+					if(BannedRecipes.Check(ITEMID, METADATA, machine) || 
 							BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), machine)) {
 						RecipearLogger.info(prefix + "Removing entry(" + RECIPE_INPUT_DISPLAYNAME + ") to craft: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
 						found = true;
 						countRemoved++;
 					}
 				}
-				
-				countChecked++;
-
-				if(found) {
-					itr.remove();
-				}
-				
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
 			}
-			return countRemoved;
+			
+			index++;
+
+			if(found) {
+				itr.remove();
+			}
+			
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
+		return countRemoved;
 	}
 }

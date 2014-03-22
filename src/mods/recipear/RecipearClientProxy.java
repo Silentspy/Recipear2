@@ -7,4 +7,9 @@ public class RecipearClientProxy extends RecipearCommonProxy{
 	public boolean isSinglePlayer() {
 		return Minecraft.getMinecraft().isSingleplayer();
 	}
+	
+	@Override
+	public boolean isServer() {
+		return false;
+	}
 }

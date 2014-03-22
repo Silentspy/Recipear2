@@ -19,12 +19,12 @@
 
 	<property name="mc.version" value="1.6.4"/>
 	<property name="forge.version" value="9.11.1.965"/>
-	<property name="ic2exp.version" value="409"/>
+	<property name="ic2exp.version" value="397"/>
 
-	<property name="recipear.version" value="2.1.0" />
+	<property name="recipear.version" value="2.2.0" />
 
 	<property name="forge.name" value="forge-${mc.version}-${forge.version}-src.zip"/>
-	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.1.${ic2exp.version}-experimental.jar"/>
+	<property name="ic2.name" value="industrialcraft-2-dev-deobf_2.0.${ic2exp.version}-experimental.jar"/>
 	<property name="ic2.url" value="http://ic2api.player.to:8080/job/IC2_experimental/${ic2exp.version}/artifact/packages/"/>
 
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>

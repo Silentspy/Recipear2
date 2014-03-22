@@ -18,9 +18,17 @@ import cpw.mods.fml.common.network.Player;
 public class ConnectionHandler implements IConnectionHandler {
 
 	@Override
-	public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) {
-		RecipearLogger.info("[SERVER] Player logged in, sending update");
-		PacketDispatcher.sendPacketToPlayer(BannedRecipes.getPacket(), player);
+	public void playerLoggedIn(Player player, NetHandler netHandler,
+			INetworkManager manager) {
+		RecipearLogger.info("[SERVER] " + netHandler.getPlayer().username
+				+ " logged in, sending update.");
+
+		ConfigPacket configpacket = new ConfigPacket(RecipearConfig.debug,
+				RecipearConfig.removeclient, RecipearConfig.placeholderName,
+				RecipearConfig.placeholderDescription,
+				BannedRecipes.getBannedRecipes());
+
+		PacketDispatcher.sendPacketToPlayer(Recipear.getPacket(configpacket), player);
 	}
 
 	@Override

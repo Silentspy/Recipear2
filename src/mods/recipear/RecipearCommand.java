@@ -36,48 +36,52 @@ public class RecipearCommand extends CommandBase implements ICommand {
 		{
 			EntityPlayer player = (EntityPlayer)icommandsender;
 			
-			if((astring.length > 0) && (astring[0].equals("output"))) 
+			if((astring.length > 0) && (astring[0].equals("reload"))) 
 			{
-				if(RecipearUtil.isOP(player)) {
-					if(!outputting) {
-						RecipearUtil.msgPlayer(player, "$eOutputting recipe list to $aRecipear.log$e...");
-						outputting = true;
-						Recipear.recipeEvents.trigger(new RecipearEvent(Side.SERVER, false));
-						outputting = false;
-					}
-				}
-			}
-			else if((astring.length > 0) && (astring[0].equals("reload"))) 
-			{
-				if(RecipearUtil.isOP(player)) {
-					if(!reloading) {
+				if(!reloading) {
+					if(RecipearUtil.isOP(player)) {
+						RecipearLogger.info("Config reloaded by " + player.username);
 						RecipearUtil.msgPlayer(player, "$eReloading $aRecipear$e..");
 						reloading = true;
-						Recipear.recipearconfig.reload();
-						Recipear.recipeEvents.trigger(new RecipearEvent(Side.SERVER, true));
+						Recipear.config.reload();
+						Recipear.events.trigger(new RecipearEvent(Side.SERVER, false));
 						
+						RecipearUtil.msgPlayer(player, "$aRecipear $ewon't restore old recipes, to do so you need a full server restart");
 						RecipearUtil.msgPlayer(player, "$eSending update to all players..");
-						PacketDispatcher.sendPacketToAllPlayers(BannedRecipes.getPacket());
+						ConfigPacket configpacket = new ConfigPacket(RecipearConfig.debug,
+								RecipearConfig.removeclient, RecipearConfig.placeholderName,
+								RecipearConfig.placeholderDescription,
+								BannedRecipes.getBannedRecipes());
+
+						PacketDispatcher.sendPacketToAllPlayers(Recipear.getPacket(configpacket));
 						
 						reloading = false;
 					}
 				}
 			}
+			else if((astring.length > 0) && (astring[0].equals("output"))) 
+			{
+				if(!outputting) {
+					if(RecipearUtil.isOP(player)) {
+						outputting = true;
+						RecipearOutput.clear();
+						Recipear.events.trigger(new RecipearEvent(Side.SERVER, true));
+						RecipearUtil.msgPlayer(player, "$eOutputted all recipes to $aRecipear-output.log");
+						RecipearLogger.info(player.username + " outputted all recipes to Recipear-output.log");
+						RecipearOutput.save();
+						outputting = false;
+					}
+				}
+			}
 			else 
 			{
-				RecipearUtil.msgPlayer(player, "$a/recipear $eoutput$a|$ereload");
-				RecipearUtil.msgPlayer(player, "$aoutput $eOutputs known recipe lists to $aRecipear.log");
-				RecipearUtil.msgPlayer(player, "$areload $eReloads config");
+				RecipearUtil.msgPlayer(player, "$a/$crecipear $ereload$a, $eoutput");
 			}
 		}
 	}
-
-	
 
 	@Override
 	public String getCommandUsage(ICommandSender icommandsender) {
 		return null;
 	}
-	
-	
 }
