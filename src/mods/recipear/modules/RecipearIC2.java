@@ -31,6 +31,7 @@ public class RecipearIC2 implements IRecipear{
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		Recipear.events.add(this);
+		RecipearLogger.info(modid + "module loaded");
 	}
 	
 	public void trigger(RecipearEvent event) {

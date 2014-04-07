@@ -25,6 +25,7 @@ public class RecipearTC4 implements IRecipear {
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		// Recipear.recipeEvents.add(this);
+		// RecipearLogger.info(modid + "module loaded");
 	}
 
 	@Override
