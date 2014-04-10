@@ -2,12 +2,14 @@ package mods.recipear;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.common.IScheduledTickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class RecipearPlayerTick implements IScheduledTickHandler{
 
+	public static boolean active = false;
+	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) 
 	{
@@ -17,7 +19,9 @@ public class RecipearPlayerTick implements IScheduledTickHandler{
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		RecipearUtil.RemoveBannedItemsFromInventory((EntityPlayer)tickData[0]);
+		if(RecipearConfig.removeIngame) {
+			RecipearUtil.RemoveBannedItemsFromInventory((EntityPlayerMP)tickData[0]);
+		}
 	}
 
 	@Override

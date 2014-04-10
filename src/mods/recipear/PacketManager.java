@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.EnumChatFormatting;
 
 public class PacketManager implements IPacketHandler
 {
@@ -37,11 +38,18 @@ public class PacketManager implements IPacketHandler
 				
 				RecipearConfig.debug = configpacket.debug;
 				RecipearConfig.removeclient = configpacket.removeclient;
-				RecipearConfig.placeholderName = configpacket.placeholderName;
 				RecipearConfig.placeholderDescription = configpacket.placeholderDescription;
 				
-				BannedRecipes.setBannedRecipes(configpacket.recipes);
-				Recipear.events.trigger(new RecipearEvent(Side.CLIENT, false));
+				if(configpacket.recipes.size() > 0) {
+					BannedRecipes.setBannedRecipes(configpacket.recipes);
+					
+					Recipear.tooltip.setActive(true);
+					Recipear.tooltip.setDescription(EnumChatFormatting.RESET + RecipearConfig.placeholderDescription.replace("$", "\u00A7") + EnumChatFormatting.RESET);
+					
+					if(configpacket.removeclient) {
+						Recipear.events.trigger(new RecipearEvent(Side.CLIENT, false));
+					}
+				}
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

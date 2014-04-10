@@ -74,15 +74,9 @@ public class RecipearVanilla implements IRecipear {
 				RecipearOutput.add(DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT + ", INDEX: " + index);
 			} else {
 				if(BannedRecipes.Check(ITEMID, METADATA, "CRAFTING") || BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), "CRAFTING")) {
-					if (!event.isServer() && !RecipearConfig.removeclient) {
-						RecipearLogger.info("Placeholding: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
-						RecipearUtil.setCraftingRecipeOutput(iRecipe, RECIPE_OUTPUT);
-						deleted++;
-					} else {
-						RecipearLogger.info("Removing: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
-						deleted++;
-						itr.remove();
-					}
+					RecipearLogger.info("Removing: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
+					deleted++;
+					itr.remove();
 				}
 			}
 			

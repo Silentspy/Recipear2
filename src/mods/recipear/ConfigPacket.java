@@ -11,16 +11,14 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class ConfigPacket implements Serializable {
 	boolean debug, removeclient;
-	String placeholderName, placeholderDescription;
+	String placeholderDescription;
 	ArrayList<BannedRecipe> recipes;
 
-	public ConfigPacket(boolean debug, boolean removeclient,
-			String placeholdername, String placeholderdescription,
+	public ConfigPacket(boolean debug, boolean removeclient, String placeholderdescription,
 			ArrayList<BannedRecipe> recipes) {
 		
 		this.debug = debug;
 		this.removeclient = removeclient;
-		this.placeholderName = placeholdername;
 		this.placeholderDescription = placeholderdescription;
 		this.recipes = recipes;
 	}

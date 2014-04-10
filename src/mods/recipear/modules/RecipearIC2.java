@@ -45,6 +45,7 @@ public class RecipearIC2 implements IRecipear{
 				RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event);
 				RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event);
 				RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event);
+				RemoveFromMachines(Recipes.oreWashing.getRecipes(), "", event);
 			} 
 			else if(BannedRecipes.GetBannedRecipeAmount() > 0) 
 			{
@@ -67,7 +68,7 @@ public class RecipearIC2 implements IRecipear{
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
-		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING");
+		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING", "SCRAPBOX");
 	}
 
 	public int RemoveFromMachines(Map recipes, String machine, RecipearEvent event) 

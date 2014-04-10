@@ -6,11 +6,15 @@ import cpw.mods.fml.common.IPlayerTracker;
 
 public class RecipearPlayerTracker implements IPlayerTracker {
 
+	public static boolean active = false;
+	
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
+		if(RecipearConfig.removeIngame) {
 			EntityPlayerMP player_mp = (EntityPlayerMP) player;
 			RecipearUtil.RemoveBannedItemsFromInventory(player_mp);
+		}
 	}
 
 	@Override

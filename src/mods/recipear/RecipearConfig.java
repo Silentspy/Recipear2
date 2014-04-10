@@ -18,20 +18,18 @@ public class RecipearConfig {
 	public static boolean removeclient = false;
 	public static boolean removeIngame = false;
 	public static int removeIngameInterval = 60;
-	public static String removeIngameMsg = "$9%s $eis $cbanned$e, removing from inventory...";
-	public static String placeholderName = "$cBanned Recipe";
-	public static String placeholderDescription = "$eThis item has been disabled by the server";
+	public static String removeIngameMsg = "$c%s $eis $cbanned$e, removing from inventory...";
+	public static String placeholderDescription = "$cThis item has disabled recipe(s)";
 	public static File recipearDataFolder;
 	
 	public static void init(FMLPreInitializationEvent event) 
 	{
 		recipearDataFolder = new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Recipear");
-		recipearDataFolder.mkdir();
-		
 		reload();
 	}
 	
 	public static void reload() {
+		recipearDataFolder.mkdir();
 		Properties();
 		BannedRecipesProperties();
 	}
@@ -43,13 +41,12 @@ public class RecipearConfig {
 		try
 		{
 			cfg.load();
-			removeclient = cfg.get("Features", "RemoveClient", removeclient, "Set this to true if you want the items to be fully removed from the client in addition to the server, rather than being just a placeholder").getBoolean(false);
-			removeIngame = cfg.get("Features", "RemoveIngame", removeIngame, "Set this to true if you want to remove banned items from players at login and every interval").getBoolean(false);
-			removeIngameInterval = cfg.get("Features", "RemoveIngameInterval", removeIngameInterval, "Interval in seconds to check if player have a banned item, default is 60 seconds").getInt(60);
-			removeIngameMsg = cfg.get("Features", "RemoveIngameMsg", removeIngameMsg).getString();
-			debug  = cfg.get(cfg.CATEGORY_GENERAL, "Debug", debug, "Turns on debug output in console/log, good if you need to see the inner workings.").getBoolean(false);
-			placeholderDescription = cfg.get("BannedItem", "Description", placeholderDescription, "Description of banned item, supports color formatting").getString();
-			placeholderName = cfg.get("BannedItem", "Name", placeholderName, "Name of the item that is banned, supports color formatting").getString();
+			removeclient = cfg.get("Features", "RemoveClient", false, "Set this to true if you want the items to be fully removed from the client in addition to the server, rather than being just a placeholder").getBoolean(false);
+			removeIngame = cfg.get("Features", "RemoveIngame", false, "Set this to true if you want to remove banned items from players at login and every interval").getBoolean(false);
+			removeIngameInterval = cfg.get("Features", "RemoveIngameInterval", 60, "Interval in seconds to check if player have a banned item, default is 60 seconds").getInt(60);
+			removeIngameMsg = cfg.get("Features", "RemoveIngameMsg", "$c%s $eis $cbanned$e, removing from inventory...").getString();
+			debug  = cfg.get(cfg.CATEGORY_GENERAL, "Debug", false, "Turns on debug output in console/log, good if you need to see the inner workings.").getBoolean(false);
+			placeholderDescription = cfg.get("BannedItem", "Description", "$cThis item has disabled recipe(s)", "Description of banned item, supports color formatting").getString();
 		}
 		catch (Exception e) 
 		{

@@ -20,15 +20,18 @@ public class ConnectionHandler implements IConnectionHandler {
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler,
 			INetworkManager manager) {
+		
+		if(BannedRecipes.GetBannedRecipeAmount() > 0) {
 		RecipearLogger.info("[SERVER] " + netHandler.getPlayer().username
 				+ " logged in, sending update.");
 
 		ConfigPacket configpacket = new ConfigPacket(RecipearConfig.debug,
-				RecipearConfig.removeclient, RecipearConfig.placeholderName,
+				RecipearConfig.removeclient,
 				RecipearConfig.placeholderDescription,
 				BannedRecipes.getBannedRecipes());
 
-		PacketDispatcher.sendPacketToPlayer(Recipear.getPacket(configpacket), player);
+			PacketDispatcher.sendPacketToPlayer(Recipear.getPacket(configpacket), player);
+		}
 	}
 
 	@Override

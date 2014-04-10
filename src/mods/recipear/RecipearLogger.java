@@ -1,6 +1,7 @@
 package mods.recipear;
 
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -51,6 +52,9 @@ public class RecipearLogger {
 		try {
 			fh = new FileHandler(path, 0, 3);
 			fh.setFormatter(new RecipearFormatter());
+			logger.addHandler(fh);
+			ConsoleHandler ch = new ConsoleHandler();
+			ch.setFormatter(new RecipearFormatter());
 			logger.addHandler(fh);
 		} catch (SecurityException e) {
 			e.printStackTrace();

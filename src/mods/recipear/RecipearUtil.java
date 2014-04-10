@@ -36,52 +36,6 @@ public class RecipearUtil {
 		return C;
 	}
 
-	public static void setCraftingRecipeOutput(IRecipe iRecipe, ItemStack output) {
-
-		if (output.stackTagCompound == null)
-		{
-			output.stackTagCompound = new NBTTagCompound("tag");
-		}
-
-		if (!output.stackTagCompound.hasKey("display"))
-		{
-			output.stackTagCompound.setCompoundTag("display", new NBTTagCompound());
-		}
-
-		String name = EnumChatFormatting.RESET + RecipearConfig.placeholderName.replace("$", "\u00A7") + EnumChatFormatting.RESET;
-		String description = EnumChatFormatting.RESET + RecipearConfig.placeholderDescription.replace("$", "\u00A7") + EnumChatFormatting.RESET;
-
-
-		NBTTagList description_list = new NBTTagList();
-		description_list.appendTag(new NBTTagString("description", description));
-
-		output.stackTagCompound.getCompoundTag("display").setString("Name", name);
-		output.stackTagCompound.getCompoundTag("display").setTag("Lore", description_list);
-
-		String ShapedRecipesOutput = (Recipear.debug) ? "recipeOutput" : "field_77575_e";
-		String ShapelessRecipesOutput = (Recipear.debug) ? "recipeOutput" : "field_77580_a";
-
-		if (iRecipe instanceof ShapedRecipes) {
-			ReflectionHelper.setPrivateValue(ShapedRecipes.class,
-					(ShapedRecipes) iRecipe, output, ShapedRecipesOutput);
-		} else if (iRecipe instanceof ShapelessRecipes) {
-			ReflectionHelper.setPrivateValue(ShapelessRecipes.class,
-					(ShapelessRecipes) iRecipe, output, ShapelessRecipesOutput);
-		} else if (iRecipe instanceof ShapelessOreRecipe) {
-			ReflectionHelper.setPrivateValue(ShapelessOreRecipe.class,
-					(ShapelessOreRecipe) iRecipe, output, "output");
-		} else if (iRecipe instanceof ShapedOreRecipe) {
-			ReflectionHelper.setPrivateValue(ShapedOreRecipe.class,
-					(ShapedOreRecipe) iRecipe, output, "output");
-		} else if ((Loader.isModLoaded("IC2")) && (iRecipe instanceof AdvRecipe)) {
-			ReflectionHelper.setPrivateValue(AdvRecipe.class,
-					(AdvRecipe) iRecipe, output, "output");
-		} else if ((Loader.isModLoaded("IC2")) && (iRecipe instanceof AdvShapelessRecipe)) { 
-			ReflectionHelper.setPrivateValue(AdvShapelessRecipe.class,
-					(AdvShapelessRecipe) iRecipe, output, "output");
-		}
-	}
-
 	public static String getLanguageRegistryEntry (ItemStack itemstack) {
 		String name = null;
 		try { 
@@ -108,21 +62,22 @@ public class RecipearUtil {
 	
 	public static void RemoveBannedItemsFromInventory(EntityPlayer player) {
 
-		if (!isOP(player) && RecipearConfig.removeIngame && (BannedRecipes.GetBannedRecipeAmount() > 0)) {
+		if (!isOP(player) && (BannedRecipes.GetBannedRecipeAmount() > 0)) {
 
 			ItemStack[] whole_inventory = concat(
 					player.inventory.mainInventory,
 					player.inventory.armorInventory);
 
-			for (ItemStack RECIPE_OUTPUT : whole_inventory) {
-				if (RECIPE_OUTPUT != null) 
+			for (ItemStack ITEM : whole_inventory) {
+				if (ITEM != null) 
 				{
-					String DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
+					String DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(ITEM);
 
-					if (BannedRecipes.Check(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage(), "INVENTORY") || BannedRecipes.Check(DISPLAYNAME, "INVENTORY"))
+					if (BannedRecipes.Check(ITEM.itemID, ITEM.getItemDamage(), "INVENTORY") || BannedRecipes.Check(DISPLAYNAME, "INVENTORY"))
 					{
+						player.inventory.clearInventory(ITEM.itemID, ITEM.getItemDamage());
 						msgPlayer(player, String.format(RecipearConfig.removeIngameMsg.replace("$", "\u00A7"), DISPLAYNAME));
-						player.inventory.clearInventory(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage());
+						RecipearLogger.info(String.format("Removing %s(%s:%s) from " + player.username, DISPLAYNAME, ITEM.itemID, ITEM.getItemDamage()));
 					}
 				}
 			}
