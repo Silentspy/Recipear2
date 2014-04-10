@@ -53,9 +53,6 @@ public class RecipearLogger {
 			fh = new FileHandler(path, 0, 3);
 			fh.setFormatter(new RecipearFormatter());
 			logger.addHandler(fh);
-			ConsoleHandler ch = new ConsoleHandler();
-			ch.setFormatter(new RecipearFormatter());
-			logger.addHandler(fh);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
