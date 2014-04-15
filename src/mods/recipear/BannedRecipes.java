@@ -25,6 +25,12 @@ public class BannedRecipes {
 
 	public static boolean Check(String NAME, String TYPE) {
 
+		NAME = NAME.replaceAll("\\s+","").toLowerCase();
+		
+		if(NAME.equals("unknown")) {
+			return false;
+		}
+		
 		BannedRecipe bannedrecipe = new BannedRecipe(NAME, "DEFAULT");
 		if(BannedRecipes.contains(bannedrecipe)) return true;
 

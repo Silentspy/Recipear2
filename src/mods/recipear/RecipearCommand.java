@@ -43,6 +43,7 @@ public class RecipearCommand extends CommandBase implements ICommand {
 			if(!reloading) {
 					RecipearLogger.info("Config reloaded by " + name);
 					reloading = true;
+					long startTime = System.currentTimeMillis();
 					Recipear.config.reload();
 					
 					if(RecipearConfig.removeIngame) {
@@ -65,21 +66,27 @@ public class RecipearCommand extends CommandBase implements ICommand {
 							BannedRecipes.getBannedRecipes());
 
 					PacketDispatcher.sendPacketToAllPlayers(Recipear.getPacket(configpacket));
-					
+					long endTime = System.currentTimeMillis() - startTime;
 					reloading = false;
-					RecipearLogger.info("Config reloaded by " + name);
-					notifyAdmins(sender, "Recipear reloaded by %s", new Object[] {sender.getCommandSenderName()});
+					RecipearLogger.info("Config reloaded by " + name + " in " + endTime + "ms");
+					notifyAdmins(sender, "Recipear reloaded by %s in " + endTime + "ms", new Object[] {sender.getCommandSenderName()});
 				}
 		}
 		else if((astring.length > 0) && (astring[0].equals("output"))) 
 		{
 			if(!outputting) {
 				outputting = true;
+				long startTime = System.currentTimeMillis();
 				RecipearOutput.clear();
 				Recipear.events.trigger(new RecipearEvent(Side.SERVER, true));
-				notifyAdmins(sender, "%s outputted all recipes to Recipear-output.log", new Object[] {sender.getCommandSenderName()});
-				RecipearLogger.info(name + " outputted all recipes to Recipear-output.log");
-				RecipearOutput.save();
+				if(RecipearOutput.save()) {
+					long endTime = System.currentTimeMillis() - startTime;
+					notifyAdmins(sender, "%s outputted all recipes to Recipear-output.log in " + endTime + "ms", new Object[] {sender.getCommandSenderName()});
+					RecipearLogger.info(name + " outputted all recipes to Recipear-output.log in " + endTime + "ms");
+				} else {
+					notifyAdmins(sender, "Recipear encountered an error when saving output", new Object[] {sender.getCommandSenderName()});
+					RecipearLogger.severe("Recipear encountered an error when saving output");
+				}
 				outputting = false;
 			}
 		}

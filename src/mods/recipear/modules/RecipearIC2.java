@@ -4,6 +4,7 @@ import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeOutput;
 import ic2.api.recipe.Recipes;
 
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import mods.recipear.RecipearOutput;
 import mods.recipear.RecipearUtil;
 import mods.recipear.api.IRecipear;
 import mods.recipear.api.RecipearEvent;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -31,7 +33,7 @@ public class RecipearIC2 implements IRecipear{
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		Recipear.events.add(this);
-		RecipearLogger.info(modid + "module loaded");
+		RecipearLogger.info(modid + " module loaded");
 	}
 	
 	public void trigger(RecipearEvent event) {
@@ -45,17 +47,24 @@ public class RecipearIC2 implements IRecipear{
 				RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event);
 				RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event);
 				RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event);
-				RemoveFromMachines(Recipes.oreWashing.getRecipes(), "", event);
+				RemoveFromMachines(Recipes.metalformerCutting.getRecipes(), "METALFORMER_CUTTING", event);
+				RemoveFromMachines(Recipes.metalformerExtruding.getRecipes(), "METALFORMER_EXTRUDING", event);
+				RemoveFromMachines(Recipes.metalformerRolling.getRecipes(), "METALFORMER_ROLLING", event);
+				ScrapBox(Recipes.scrapboxDrops.getDrops(), "SCRAPBOX", event);
 			} 
 			else if(BannedRecipes.GetBannedRecipeAmount() > 0) 
 			{
 				long startTime = System.currentTimeMillis();
 				RecipearLogger.info(prefix + "Starting in " + event.getSide().toString() + " Mode");
-				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event)  + " CENTRIFUGE recipe(s)");
-				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event)  + " COMPRESSOR recipe(s)");
-				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event)  + " EXTRACTOR recipe(s)");
-				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event)  + " MACERATOR recipe(s)");
-				RecipearLogger.info(prefix + "Removed " + RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event)  + " OREWASHING recipe(s)");
+				RecipearLogger.info(RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.macerator.getRecipes(), "MACERATOR", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.oreWashing.getRecipes(), "OREWASHING", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.metalformerCutting.getRecipes(), "METALFORMER_CUTTING", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.metalformerExtruding.getRecipes(), "METALFORMER_EXTRUDING", event));
+				RecipearLogger.info(RemoveFromMachines(Recipes.metalformerRolling.getRecipes(), "METALFORMER_ROLLING", event));
+				RecipearLogger.info(ScrapBox(Recipes.scrapboxDrops.getDrops(), "SCRAPBOX", event));
 				RecipearLogger.info(prefix + "Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 			}
 		}
@@ -68,10 +77,61 @@ public class RecipearIC2 implements IRecipear{
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
-		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING", "SCRAPBOX");
+		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING", "METALFORMER_CUTTING", "METALFORMER_EXTRUDING", "METALFORMER_ROLLING", "SCRAPBOX");
+	}
+	
+	public String ScrapBox(Map<ItemStack, Float> drops, String machine, RecipearEvent event) {
+		DecimalFormat liquidAmountFormat = new DecimalFormat("0.##%");
+		
+		if(event.isOutput()) {
+			RecipearOutput.add("-- " + machine + " --");
+		} else {
+			RecipearLogger.info(prefix + "Scanning through " + drops.size() + " recipe(s) for " + machine);
+		}
+		
+		int countRemoved = 0, index = 0;
+		
+		for (Iterator itr = drops.entrySet().iterator(); itr.hasNext();) {
+			try {
+			Map.Entry entry = (Map.Entry) itr.next();
+			ItemStack itemstack = (ItemStack) entry.getKey();
+			Float chance = (Float) entry.getValue();
+			
+			if((itemstack == null) || (chance == null)) { 
+				index++;
+				continue;
+			}
+			
+			boolean found = false;
+			String recipe_output = RecipearUtil.getFancyItemStackInfo(itemstack) + ", CHANCE: " + liquidAmountFormat.format(chance);
+			
+			if(BannedRecipes.Check(itemstack.itemID, itemstack.getItemDamage(), machine) || 
+					BannedRecipes.Check(RecipearUtil.getLanguageRegistryEntry(itemstack), machine)) {
+				found = true;
+			}
+			
+			if(event.isOutput()) {
+				RecipearOutput.add("i(" + index + ") OUTPUT[" + recipe_output + "]");
+			} else if (found) {
+				RecipearOutput.add("i(" + index + ") OUTPUT[" + recipe_output + "]");
+			}
+			
+			if(found) {
+				itr.remove();
+				countRemoved++;
+			}
+			
+			index++;
+			
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		return prefix + "Removed " + countRemoved + " " + machine + " recipe(s)";
 	}
 
-	public int RemoveFromMachines(Map recipes, String machine, RecipearEvent event) 
+	public String RemoveFromMachines(Map recipes, String machine, RecipearEvent event) 
 	{
 		if(event.isOutput()) {
 			RecipearOutput.add("-- " + machine + " --");
@@ -79,99 +139,82 @@ public class RecipearIC2 implements IRecipear{
 			RecipearLogger.info(prefix + "Scanning through " + recipes.size() + " recipe(s) for " + machine);
 		}
 		
-		int countRemoved = 0, index = 0, NBTTAGSCOUNT = 0, ITEMID, METADATA;
-		String DISPLAYNAME = "Unknown";
-		RecipeOutput RECIPE_OUTPUT_RAW = null, RECIPE_OUTPUT_NEW = null;
-		ItemStack RECIPE_OUTPUT = null;
+		int countRemoved = 0, index = 0;
 		
 		for (Iterator itr = recipes.entrySet().iterator(); itr.hasNext();) {
 			try {
 			Map.Entry entry = (Map.Entry) itr.next();
-			Object RECIPE_INPUT_RAW = (Object) entry.getKey();
-			RECIPE_OUTPUT_RAW = (RecipeOutput) entry.getValue();
+			IRecipeInput recipe_input = (IRecipeInput) entry.getKey();
+			RecipeOutput recipe_output = (RecipeOutput) entry.getValue();
 			
-			if(RECIPE_INPUT_RAW == null) { 
-				continue;
-			}
-			
-			if(RECIPE_OUTPUT_RAW == null) {
+			if((recipe_input == null) || (recipe_output == null)) { 
+				index++;
 				continue;
 			}
 
-			String RECIPE_INPUT_DISPLAYNAME = "N/A";
-
-			if(RECIPE_INPUT_RAW instanceof IRecipeInput) {
-				IRecipeInput recipe = (IRecipeInput)RECIPE_INPUT_RAW;
+			String recipe_inputs = "N/A";
+			
+			for(ItemStack itemstack : recipe_input.getInputs()) {
 				
-				for(ItemStack itemstack : recipe.getInputs()) {
-					
-					try {
-					
-					if(itemstack == null) {
-						continue;
-					}
-					
-					if(itemstack.getUnlocalizedName() == null) {
-						continue;
-					}
-					
-					String temp = "[" + RecipearUtil.getLanguageRegistryEntry(itemstack) + ":" + itemstack.getItemDamage() + ", AMOUNT: " + recipe.getAmount() + "]"; 	
-
-					RECIPE_INPUT_DISPLAYNAME = (RECIPE_INPUT_DISPLAYNAME.equals("N/A")) ? temp : ", " + temp;
-					
-					} catch (Exception ex) {
-						RecipearLogger.warning(prefix + "Failed to fetch name for " + itemstack.itemID + ":" + itemstack.getItemDamage());
-					}
+				if(itemstack == null) {
+					continue;
 				}
-			}
-
-			if(!event.isOutput()) {
-				RecipearLogger.debug(prefix + "INPUT: " + RECIPE_INPUT_DISPLAYNAME);
+				
+				String temp = RecipearUtil.getLanguageRegistryEntry(itemstack) + "@" + itemstack.itemID + ":" + itemstack.getItemDamage() + " x " + recipe_input.getAmount(); 	
+	
+				if(recipe_inputs.equals("N/A")) {
+					recipe_inputs = temp;
+				} else {
+					recipe_inputs += ", " + temp;
+				}
 			}
 			
 			boolean found = false;
+			String recipe_outputs = "N/A";
+			
+			for(Iterator<ItemStack> items_itr  = recipe_output.items.iterator(); items_itr.hasNext();) {
+				ItemStack itemstack = items_itr.next();
 
-			for(Iterator<ItemStack> items_itr  = RECIPE_OUTPUT_RAW.items.iterator(); items_itr.hasNext();) {
-				RECIPE_OUTPUT = items_itr.next();
-
-				if (RECIPE_OUTPUT == null) {
+				if (itemstack == null) {
 					continue;
 				}
-
-				ITEMID = RECIPE_OUTPUT.itemID;
-				METADATA = RECIPE_OUTPUT.getItemDamage();
-				if(RECIPE_OUTPUT.getTagCompound() != null) {
-					NBTTAGSCOUNT = RECIPE_OUTPUT.getTagCompound().getTags().size();
-				}
+					
+				String temp = RecipearUtil.getFancyItemStackInfo(itemstack);
 				
-				try {
-					DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT);
-				} catch (Exception ex) {
-					RecipearLogger.warning(prefix + "Failed to fetch name for " + ITEMID + ":" + METADATA);
-				}
-				
-				if(event.isOutput()) {
-					RecipearOutput.add(prefix + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA + ", NBTCOUNT: " + NBTTAGSCOUNT + ", INDEX: " + index);
+				if(recipe_outputs.equals("N/A")) {
+					recipe_outputs = temp;
 				} else {
-					if(BannedRecipes.Check(ITEMID, METADATA, machine) || 
-							BannedRecipes.Check(DISPLAYNAME.replaceAll("\\s+","").toLowerCase(), machine)) {
-						RecipearLogger.info(prefix + "Removing entry(" + RECIPE_INPUT_DISPLAYNAME + ") to craft: " + DISPLAYNAME + ", ID: " + ITEMID + ", METADATA: " + METADATA);
-						found = true;
-						countRemoved++;
-					}
+					recipe_outputs += ", " + temp;
+				}
+				
+				if(BannedRecipes.Check(itemstack.itemID, itemstack.getItemDamage(), machine) || 
+						BannedRecipes.Check(RecipearUtil.getLanguageRegistryEntry(itemstack), machine)) {
+					found = true;
 				}
 			}
 			
-			index++;
-
+			if(event.isOutput()) {
+				RecipearOutput.add("i(" + index + ") " + machine + " Recipe");
+				RecipearOutput.add("INPUT[" + recipe_inputs + "]");
+				RecipearOutput.add("OUTPUT[" + recipe_outputs + "]");
+			} else if (found) {
+				RecipearLogger.info("i(" + index + ") " + machine + " Recipe");
+				RecipearLogger.info("INPUT[" + recipe_inputs + "]");
+				RecipearLogger.info("OUTPUT[" + recipe_outputs + "]");
+			}
+			
 			if(found) {
 				itr.remove();
+				countRemoved++;
 			}
+			
+			index++;
 			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		return countRemoved;
+		
+		return prefix + "Removed " + countRemoved + " " + machine + " recipe(s)";
 	}
 }

@@ -3,6 +3,7 @@ package mods.recipear;
 import ic2.core.AdvRecipe;
 import ic2.core.AdvShapelessRecipe;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -37,11 +38,14 @@ public class RecipearUtil {
 	}
 
 	public static String getLanguageRegistryEntry (ItemStack itemstack) {
-		String name = null;
-		try { 
-			name = itemstack.getUnlocalizedName(); 
-		} 
-		catch (Exception ex) { 
+		String name = "Unknown";
+		
+		try {
+			if(itemstack.getUnlocalizedName() != null) {
+				name = itemstack.getUnlocalizedName(); 
+			}
+		}
+		catch (NullPointerException ex) { 
 			return "Unknown";
 		}
 		
@@ -88,5 +92,9 @@ public class RecipearUtil {
 	
 	public static void msgPlayer(EntityPlayer player, String msg) {
 		player.sendChatToPlayer(new ChatMessageComponent().createFromText(msg.replace("$", "\u00A7")));
+	}
+	
+	public static String getFancyItemStackInfo(ItemStack itemstack) {
+		return getLanguageRegistryEntry(itemstack) + "@" + itemstack.itemID + ":" + itemstack.getItemDamage() + " x " + itemstack.stackSize;
 	}
 }
