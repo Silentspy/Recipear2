@@ -1,5 +1,7 @@
-/build/
-/download/
-/distribute/
+build/
+distribute/
+eclipse/
+.gradle/
 .project
 .classpath
+.project

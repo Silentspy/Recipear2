@@ -1,0 +1,34 @@
+[
+{
+  "modid": "Recipear2",
+  "name": "Recipear2",
+  "description": "Removes Recipes",
+  "version": "@version@",
+  "mcversion": "@mcversion@",
+  "url": "http://www.silentspy.net/recipear",
+  "updateUrl": "",
+  "authors": ["Silentspy"],
+  "credits": "Mod by Silentspy",
+  "logoFile": "",
+  "screenshots": [],
+  "parent":"",
+  "dependencies": []
+},
+{
+  "modid": "Recipear2|IC2",
+  "name": "IC2",
+  "description": "Recipear IC2 Module",
+  "version": "@version@",
+  "mcversion": "@mcversion@",
+  "url": "http://www.silentspy.net/recipear",
+  "updateUrl": "",
+  "authors": ["Silentspy"],
+  "credits": "Mod by Silentspy",
+  "logoFile": "",
+  "screenshots": [],
+  "parent":"Recipear2",
+  "dependencies": [
+  "Recipear2"
+  ]
+}
+]
