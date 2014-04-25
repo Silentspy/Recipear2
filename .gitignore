@@ -1,6 +1,7 @@
 build/
 distribute/
 eclipse/
+.settings/
 .gradle/
 .project
 .classpath
