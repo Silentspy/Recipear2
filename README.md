@@ -1,4 +1,4 @@
-[![image](resources/recipear.png)](http://www.minecraftforum.net/topic/1621605-)
+[![image](recipear.png)](http://www.minecraftforum.net/topic/1621605-)
 ==========
 Recipear's goal is to be able to remove every recipe in the game including from most of the forge mods
 
@@ -46,17 +46,4 @@ Disables "Light Blue Wool" from being Crafted
 
 ##Compile & Build
 
-if you like to do this by hand you can seek out these options
-
-Option 1 (Eclipse with ant, Assuming you have Forge workspace)
-- Create a new Project in forge workspace called "Recipear"
-- Add Required Project "Minecraft" in Project Properties
-- Drag & drop build.xml into "Recipear"
-- Drag & drop everything from src into "Recipear"
-- Add Referenced library for Google Guava (Minecraft/jar/libraries/com/google/guava/guava/14.0/guava-14.0.jar)
-- Add Referenced Library for deobfuscated(deobf) IndustrialCraft2 which should be downloaded manually at http://ic2api.player.to:8080/job/IC2_experimental/
-- Adjust Run properties to include Recipear in it's classpath
-- Enjoy!
-
-Option 2 (Manual)
-- Run [Apache Ant](http://ant.apache.org/bindownload.cgi) in the repository root: `ant package`
+http://www.minecraftforge.net/forum/index.php?topic=14048.0
