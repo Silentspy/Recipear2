@@ -2,6 +2,8 @@ package mods.recipear;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import mods.recipear.api.RecipearEvent;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
@@ -86,13 +88,12 @@ public class RecipearCommand extends CommandBase implements ICommand {
 		}
 		else if((astring.length > 0) && (astring[0].equals("types"))) 
 		{
-			String supported_types = "Supported Recipe Types are";
+			String text = "Supported Recipear2 Types: ";
+
+			text += StringUtils.join(BannedRecipes.getBannedRecipeTypes(), ", ");
+			text += ".";
 			
-			for(String type : BannedRecipes.getBannedRecipeTypes()) {
-				supported_types += " " + type;
-			}
-			
-			notifyAdmins(sender, supported_types, new Object[] {sender.getCommandSenderName()});
+			notifyAdmins(sender, text, new Object[] {sender.getCommandSenderName()});
 		}
 		else
         {
