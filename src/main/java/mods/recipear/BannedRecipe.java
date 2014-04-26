@@ -3,8 +3,9 @@ package mods.recipear;
 import java.io.Serializable;
 
 public class BannedRecipe implements Serializable{
-	int id, metadata;
-	String name, type;
+	
+	public int id, metadata;
+	public String name, type;
 
 	public BannedRecipe(int id) 
 	{ 
@@ -36,7 +37,10 @@ public class BannedRecipe implements Serializable{
 		this.metadata = -1;
 		this.type = type;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -47,40 +51,48 @@ public class BannedRecipe implements Serializable{
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof BannedRecipe))
+		}
+		if (!(obj instanceof BannedRecipe)) {
 			return false;
+		}
 		BannedRecipe other = (BannedRecipe) obj;
-		if (id != other.id)
+		if (id != other.id) {
 			return false;
-		if (metadata != other.metadata)
+		}
+		if (metadata != other.metadata) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (type == null) {
-			if (other.type != null)
+			if (other.type != null) {
 				return false;
-		} else if (!type.equals(other.type))
+			}
+		} else if (!type.equals(other.type)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() 
 	{
-		if(id > 0) {
-			return String.format("BannedRecipe[id: %s, metadata: %s, type: %s]", id, metadata, type);
-		} else {
-			return String.format("BannedRecipe[name: %s, type: %s]", name, type);
-		}
+		return String.format("BannedRecipe[name: %s, id: %s, metadata: %s, type: %s]", name, id, metadata, type);
 	}
 }

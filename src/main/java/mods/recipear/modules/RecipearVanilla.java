@@ -4,14 +4,12 @@ import ic2.core.AdvRecipe;
 import ic2.core.AdvShapelessRecipe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cpw.mods.fml.common.Loader;
 import mods.recipear.BannedRecipes;
-import mods.recipear.RecipearConfig;
+import mods.recipear.Recipear;
 import mods.recipear.RecipearLogger;
 import mods.recipear.RecipearOutput;
 import mods.recipear.RecipearUtil;
@@ -27,24 +25,33 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 
+@Mod(modid = "Recipear2|Vanilla", name = "Vanilla", version = "2.3.1", dependencies="required-after:Recipear2@[2.3,)")
 public class RecipearVanilla implements IRecipear {
+	
+	String prefix = "[" + getName() + "] ";
+	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) 
+	{
+		Recipear.events.add(this);
+	}
 	
 	public void trigger(RecipearEvent event) 
 	{
 		if(event.isOutput()) 
 		{
-				RemoveRecipes(event, "CRAFTING");
-				RemoveFurnaceRecipes(event, "FURNACE");
+			RemoveRecipes(event, "CRAFTING");
+			RemoveFurnaceRecipes(event, "FURNACE");
 		} 
 		else if (BannedRecipes.GetBannedRecipeAmount() > 0)
 		{
-			long startTime = System.currentTimeMillis();
-			
-			RecipearLogger.info("Starting in " + event.getSide().toString() + " Mode");
-			RecipearLogger.info(RemoveRecipes(event, "CRAFTING"));
-			RecipearLogger.info(RemoveFurnaceRecipes(event, "FURNACE"));
-			RecipearLogger.info("Finished in " + (System.currentTimeMillis() - startTime) + "ms");
+			RecipearLogger.info(prefix + RemoveRecipes(event, "CRAFTING"));
+			RecipearLogger.info(prefix + RemoveFurnaceRecipes(event, "FURNACE"));
 		}
 	}
 
@@ -55,7 +62,7 @@ public class RecipearVanilla implements IRecipear {
 		if(event.isOutput()) {
 			RecipearOutput.add("-- " + type + " --");
 		} else {
-			RecipearLogger.info("Scanning " + recipelist.size() + " " + type + " recipe(s)");
+			RecipearLogger.info(prefix + "Scanning " + recipelist.size() + " " + type + " recipe(s)");
 		}
 		
 		int deleted = 0, index = 0;
@@ -239,9 +246,9 @@ public class RecipearVanilla implements IRecipear {
 				} 
 				else 
 				{
-					RecipearLogger.info("i(" + index + ") " + recipe_type + " Recipe");
-					RecipearLogger.info("INPUT[" + recipe_inputs + "]");
-					RecipearLogger.info("OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
+					RecipearLogger.info(prefix + "i(" + index + ") " + recipe_type + " Recipe");
+					RecipearLogger.info(prefix + "INPUT[" + recipe_inputs + "]");
+					RecipearLogger.info(prefix + "OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
 					deleted++;
 					itr.remove();
 				}
@@ -259,7 +266,7 @@ public class RecipearVanilla implements IRecipear {
 		if(event.isOutput()) {
 			RecipearOutput.add("-- " + type + " --");
 		} else {
-			RecipearLogger.info("Scanning " + (FurnaceRecipes.smelting().getMetaSmeltingList().size() + FurnaceRecipes.smelting().getSmeltingList().size()) + " " + type + " recipe(s)");
+			RecipearLogger.info(prefix + "Scanning " + (FurnaceRecipes.smelting().getMetaSmeltingList().size() + FurnaceRecipes.smelting().getSmeltingList().size()) + " " + type + " recipe(s)");
 		}
 		
 		int deleted = 0, index = 0;
@@ -283,9 +290,9 @@ public class RecipearVanilla implements IRecipear {
 				RecipearOutput.add("OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
 			} else {
 				if (BannedRecipes.Check(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage(), type) || BannedRecipes.Check(RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT), type)) {
-					RecipearLogger.info("i(" + index + ") MetaSmelting Recipe");
-					RecipearLogger.info("INPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_INPUT) +", EXPERIENCE(" + FurnaceRecipes.smelting().getExperience(RECIPE_OUTPUT) + ")]");
-					RecipearLogger.info("OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
+					RecipearLogger.info(prefix + "i(" + index + ") MetaSmelting Recipe");
+					RecipearLogger.info(prefix + "INPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_INPUT) +", EXPERIENCE(" + FurnaceRecipes.smelting().getExperience(RECIPE_OUTPUT) + ")]");
+					RecipearLogger.info(prefix + "OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
 					itr.remove();
 					deleted++;
 				}
@@ -310,9 +317,9 @@ public class RecipearVanilla implements IRecipear {
 				RecipearOutput.add("OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
 			} else {
 				if (BannedRecipes.Check(RECIPE_OUTPUT.itemID, RECIPE_OUTPUT.getItemDamage(), type) || BannedRecipes.Check(RecipearUtil.getLanguageRegistryEntry(RECIPE_OUTPUT), type)) {
-					RecipearLogger.info("i(" + index + ") Smelting Recipe");
-					RecipearLogger.info("INPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_INPUT) +", EXPERIENCE(" + FurnaceRecipes.smelting().getExperience(RECIPE_OUTPUT) + ")]");
-					RecipearLogger.info("OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
+					RecipearLogger.info(prefix + "i(" + index + ") Smelting Recipe");
+					RecipearLogger.info(prefix + "INPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_INPUT) +", EXPERIENCE(" + FurnaceRecipes.smelting().getExperience(RECIPE_OUTPUT) + ")]");
+					RecipearLogger.info(prefix + "OUTPUT[" + RecipearUtil.getFancyItemStackInfo(RECIPE_OUTPUT) + "]");
 					itr.remove();
 					deleted++;
 				}
@@ -322,5 +329,25 @@ public class RecipearVanilla implements IRecipear {
 		}
 		
 		return "Removed " + deleted + " " + type + " recipe(s)";
+	}
+	
+	@Override
+	public String[] getTypes() {
+		return new String[] {"CRAFTING", "FURNACE"};
+	}
+
+	@Override
+	public String getName() {
+		return "Vanilla";
+	}
+
+	@Override
+	public String getFullName() {
+		return getName();
+	}
+
+	@Override
+	public String getModID() {
+		return getName();
 	}
 }

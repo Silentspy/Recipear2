@@ -1,11 +1,6 @@
 package mods.recipear;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-
-import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class BannedRecipes {
 	private static ArrayList<BannedRecipe> BannedRecipes = new ArrayList<BannedRecipe>();
@@ -65,16 +60,27 @@ public class BannedRecipes {
 	public static boolean CheckSpecifically(int ID, int METADATA, String TYPE) {
 
 		BannedRecipe bannedrecipe = new BannedRecipe(ID, METADATA, TYPE);
-		if(BannedRecipes.contains(bannedrecipe)) return true;
+		if(BannedRecipes.contains(bannedrecipe)) {	
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean CheckSpecifically(int ID, String TYPE) {
 
+		BannedRecipe bannedrecipe = new BannedRecipe(ID, -1, TYPE);
+		if(BannedRecipes.contains(bannedrecipe)) {	
+			return true;
+		}
 		return false;
 	}
 
 	public static boolean CheckSpecifically(String NAME, String TYPE) {
 
 		BannedRecipe bannedrecipe = new BannedRecipe(NAME, TYPE);
-		if(BannedRecipes.contains(bannedrecipe)) return true;
-
+		if(BannedRecipes.contains(bannedrecipe)) {	
+			return true;
+		}
 		return false;
 	}
 

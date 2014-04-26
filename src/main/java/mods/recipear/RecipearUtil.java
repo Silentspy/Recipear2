@@ -1,27 +1,14 @@
 package mods.recipear;
 
-import ic2.core.AdvRecipe;
-import ic2.core.AdvShapelessRecipe;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class RecipearUtil {
 
@@ -107,5 +94,28 @@ public class RecipearUtil {
 	
 	public static String getFancyItemStackInfo(ItemStack itemstack) {
 		return getLanguageRegistryEntry(itemstack) + "@" + itemstack.itemID + ":" + itemstack.getItemDamage() + " x " + itemstack.stackSize;
+	}
+	
+	public static ItemStack[] getitem(int id) {
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		
+		if(id <= 32000) {
+			int index = 0;
+		
+			while(index < 16) {
+				ItemStack itemstack = new ItemStack(id, 1, index);
+				
+				if(itemstack != null) {
+					if((index > 0) && !(getLanguageRegistryEntry(items.get(0)).equals(getLanguageRegistryEntry(itemstack)))) {
+						items.add(itemstack);
+					} else if (index == 0) {
+						items.add(itemstack);
+					}
+				}
+				index++;
+			}
+		}
+		
+		return items.toArray(new ItemStack[0]);
 	}
 }

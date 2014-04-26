@@ -118,7 +118,7 @@ public class RecipearConfig {
 						if(ITEMID == 0) {
 							BANNEDRECIPE.name = NAME;
 						}
-							
+						
 						BannedRecipes.AddBannedRecipe(BANNEDRECIPE);
 
 						RecipearLogger.info("Added: " + BANNEDRECIPE.toString());

@@ -1,8 +1,5 @@
 package mods.recipear.api;
 
-import java.util.ArrayList;
-
-import mods.recipear.BannedRecipe;
 import cpw.mods.fml.relauncher.Side;
 
 public class RecipearEvent{
@@ -37,4 +34,12 @@ public class RecipearEvent{
 	public boolean isOutput() {
 		return output;
 	}
+	
+	@Override
+	public String toString() {
+		return "RecipearEvent[side=" + side + ", server=" + server
+				+ ", output=" + output + "]";
+	}
+	
+	
 }

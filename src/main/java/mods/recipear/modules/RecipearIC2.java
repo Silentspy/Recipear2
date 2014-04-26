@@ -15,31 +15,27 @@ import mods.recipear.RecipearOutput;
 import mods.recipear.RecipearUtil;
 import mods.recipear.api.IRecipear;
 import mods.recipear.api.RecipearEvent;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "Recipear2|IC2", name = "IC2", version = "1.0", dependencies="required-after:Recipear2@[2.1,)")
+@Mod(modid = "Recipear2|IC2", name = "IC2", version = "2.3.1", dependencies="required-after:Recipear2@[2.3,)")
 public class RecipearIC2 implements IRecipear{
 	
-	String modid = "IC2";
-	String prefix = "[" + modid + "] ";
+	String prefix = "[" + getName() + "] ";
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		Recipear.events.add(this);
-		RecipearLogger.info(modid + " module loaded");
 	}
 	
 	public void trigger(RecipearEvent event) {
 		
-		if(Loader.isModLoaded(modid)) 
+		if(Loader.isModLoaded(getModID())) 
 		{
 			if(event.isOutput()) 
 			{
@@ -55,8 +51,6 @@ public class RecipearIC2 implements IRecipear{
 			} 
 			else if(BannedRecipes.GetBannedRecipeAmount() > 0) 
 			{
-				long startTime = System.currentTimeMillis();
-				RecipearLogger.info(prefix + "Starting in " + event.getSide().toString() + " Mode");
 				RecipearLogger.info(RemoveFromMachines(Recipes.centrifuge.getRecipes(), "CENTRIFUGE", event));
 				RecipearLogger.info(RemoveFromMachines(Recipes.compressor.getRecipes(), "COMPRESSOR", event));
 				RecipearLogger.info(RemoveFromMachines(Recipes.extractor.getRecipes(), "EXTRACTOR", event));
@@ -66,19 +60,12 @@ public class RecipearIC2 implements IRecipear{
 				RecipearLogger.info(RemoveFromMachines(Recipes.metalformerExtruding.getRecipes(), "METALFORMER_EXTRUDING", event));
 				RecipearLogger.info(RemoveFromMachines(Recipes.metalformerRolling.getRecipes(), "METALFORMER_ROLLING", event));
 				RecipearLogger.info(ScrapBox(Recipes.scrapboxDrops.getDrops(), "SCRAPBOX", event));
-				RecipearLogger.info(prefix + "Finished in " + (System.currentTimeMillis() - startTime) + "ms");
 			}
 		}
 		else 
 		{
-			RecipearLogger.info(prefix + "Could not find " + modid);
+			RecipearLogger.info(prefix + "Could not find " + getModID());
 		}
-	}
-
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) 
-	{
-		BannedRecipes.AddBannedRecipeType("CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING", "METALFORMER_CUTTING", "METALFORMER_EXTRUDING", "METALFORMER_ROLLING", "SCRAPBOX");
 	}
 	
 	public String ScrapBox(Map<ItemStack, Float> drops, String machine, RecipearEvent event) {
@@ -223,5 +210,25 @@ public class RecipearIC2 implements IRecipear{
 		}
 		
 		return prefix + "Removed " + countRemoved + " " + machine + " recipe(s)";
+	}
+	
+	@Override
+	public String[] getTypes() {
+		return new String[] {"CENTRIFUGE", "COMPRESSOR", "EXTRACTOR", "MACERATOR", "OREWASHING", "METALFORMER_CUTTING", "METALFORMER_EXTRUDING", "METALFORMER_ROLLING", "SCRAPBOX"};
+	}
+
+	@Override
+	public String getName() {
+		return getModID();
+	}
+
+	@Override
+	public String getFullName() {
+		return "IndustrialCraft2";
+	}
+
+	@Override
+	public String getModID() {
+		return "IC2";
 	}
 }

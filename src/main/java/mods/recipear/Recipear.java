@@ -27,13 +27,11 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "Recipear2", name = "Recipear2", version = "2.2.0", dependencies="required-after:Forge@[9.10,)")
+@Mod(modid = "Recipear2", name = "Recipear2", version = "2.3.1", dependencies="required-after:Forge@[9.10,)")
 @NetworkMod(clientSideRequired = false, serverSideRequired = false, channels = {"recipear"}, packetHandler = PacketManager.class)
 public class Recipear 
 {
-	public static boolean debug = true;
 	public static RecipearListener events = new RecipearListener();
 	
 	@SidedProxy(clientSide="mods.recipear.RecipearClientProxy", serverSide="mods.recipear.RecipearCommonProxy")
@@ -52,7 +50,7 @@ public class Recipear
 		
 		mcDataDir = event.getModConfigurationDirectory().getParentFile().getAbsolutePath();
 		
-		BannedRecipes.AddBannedRecipeType("CRAFTING","FURNACE","INVENTORY");
+		BannedRecipes.AddBannedRecipeType("INVENTORY");
 		RecipearLogger.setLogger(Logger.getLogger("Recipear"), new File(mcDataDir, "Recipear-" + (proxy.isServer() ? "server" : "client") + ".log").getAbsolutePath());
 		if(proxy.isServer()) {
 			config = new RecipearConfig();
@@ -66,24 +64,6 @@ public class Recipear
 		if(!proxy.isServer()) {
 	    	MinecraftForge.EVENT_BUS.register(tooltip);
 		}
-	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) 
-	{
-		// show supported recipe types
-		String supported_types = "Supported Recipe Types are";
-		
-		for(String type : BannedRecipes.getBannedRecipeTypes()) {
-			supported_types += " " + type;
-		}
-		
-		if(debug) {
-			RecipearConfig.debug = true;
-		}
-		RecipearLogger.info(supported_types);
-		
-		events.add(new RecipearVanilla());
 	}
 
 	@EventHandler

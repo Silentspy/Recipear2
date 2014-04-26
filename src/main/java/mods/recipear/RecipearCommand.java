@@ -1,22 +1,16 @@
 package mods.recipear;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 import mods.recipear.api.RecipearEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.EnumChatFormatting;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class RecipearCommand extends CommandBase implements ICommand {
 
@@ -90,25 +84,34 @@ public class RecipearCommand extends CommandBase implements ICommand {
 				outputting = false;
 			}
 		}
+		else if((astring.length > 0) && (astring[0].equals("types"))) 
+		{
+			String supported_types = "Supported Recipe Types are";
+			
+			for(String type : BannedRecipes.getBannedRecipeTypes()) {
+				supported_types += " " + type;
+			}
+			
+			notifyAdmins(sender, supported_types, new Object[] {sender.getCommandSenderName()});
+		}
 		else
         {
-            throw new WrongUsageException("/recipear <reload/output>", new Object[0]);
+            throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
         }
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender icommandsender) {
-		return "/recipear <reload/output>";
+		return "/recipear <reload/output/types>";
 	}
 	
 	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr)
     {
-        return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"reload", "output"}): null;
+        return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] {"reload", "output", "types"}): null;
     }
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 }

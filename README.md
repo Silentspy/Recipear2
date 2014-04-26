@@ -1,10 +1,10 @@
-[![image](recipear.png)](http://www.minecraftforum.net/topic/1621605-)
+[![image](src/main/resources/recipear.png)](http://www.minecraftforum.net/topic/1621605-)
 ==========
 Recipear's goal is to be able to remove every recipe in the game including from most of the forge mods
 
 ##Download & Installation
 
-you can get the latest builds @ http://ci.fragwith.us/job/Recipear2/
+you can get the latest builds @ http://teamcity.sk89q.com/viewType.html?buildTypeId=recipear2_main&guest=true
 
 put the mod in your mods folder and run the server at least once to get your configs all set up
 
@@ -44,6 +44,26 @@ Disables "Light Blue Wool" from being Crafted
   - **reload** will reload config and send out update to players
   - **output** outputs recipe list to *Recipear-output.log*
 
+##Supported Recipe Types
+To get a proper list of supported names and itemid's you should use **/recipear output** to get all the recipes logged into a file
+
+- CRAFTING (ITEMID, ITEMID:META, NAME)
+- FURNACE (ITEMID, ITEMID:META, NAME)
+- INVENTORY (ITEMID, ITEMID:META, NAME)
+- CENTRIFUGE (ITEMID, ITEMID:META, NAME)
+- COMPRESSOR (ITEMID, ITEMID:META, NAME)
+- EXTRACTOR (ITEMID, ITEMID:META, NAME)
+- MACERATOR (ITEMID, ITEMID:META, NAME)
+- OREWASHING (ITEMID, ITEMID:META, NAME)
+- METALFORMER_CUTTING (ITEMID, ITEMID:META, NAME)
+- METALFORMER_EXTRUDING (ITEMID, ITEMID:META, NAME)
+- METALFORMER_ROLLING (ITEMID, ITEMID:META, NAME)
+- SCRAPBOX (ITEMID, ITEMID:META, NAME)
+- NEI (ITEMID)
+
 ##Compile & Build
 
+Mostly follow this guide here
 http://www.minecraftforge.net/forum/index.php?topic=14048.0
+
+but "Program Arguments" for run configuration have to be "--version 1.6.4 --tweakClass cpw.mods.fml.common.launcher.FMLTweaker --accessToken FML"
