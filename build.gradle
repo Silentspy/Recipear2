@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
     }
+    delete fileTree(dir: 'build/libs',include:'*.jar') 
 }
 
 apply plugin: 'forge'
@@ -24,6 +25,7 @@ dependencies {
 minecraft {
     version = "1.6.4-9.11.1.964"
 }
+
 
 archivesBaseName = "Recipear2-" + project.minecraft.version
 
