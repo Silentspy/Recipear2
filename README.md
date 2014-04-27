@@ -60,6 +60,7 @@ To get a proper list of supported names and itemid's you should use **/recipear 
 - METALFORMER_ROLLING (ITEMID, ITEMID:META, NAME)
 - SCRAPBOX (ITEMID, ITEMID:META, NAME)
 - NEI (ITEMID)
+- THAUMCRAFT (ITEMID, ITEMID:META, NAME)
 
 ##Compile & Build
 
