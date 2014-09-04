@@ -65,7 +65,7 @@ public class RecipearUtil {
 				{
 					String DISPLAYNAME = RecipearUtil.getLanguageRegistryEntry(ITEM);
 
-					if (BannedRecipes.Check(ITEM.itemID, ITEM.getItemDamage(), "INVENTORY") || BannedRecipes.Check(DISPLAYNAME, "INVENTORY"))
+					if (BannedRecipes.CheckSpecifically(ITEM.itemID, ITEM.getItemDamage(), "INVENTORY") || BannedRecipes.CheckSpecifically(DISPLAYNAME, "INVENTORY"))
 					{
 						player.inventory.clearInventory(ITEM.itemID, ITEM.getItemDamage());
 						msgPlayer(player, String.format(RecipearConfig.removeIngameMsg.replace("$", "\u00A7"), DISPLAYNAME));

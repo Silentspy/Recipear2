@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import mods.recipear.api.RecipearEvent;
 import mods.recipear.api.RecipearListener;
-import mods.recipear.modules.RecipearVanilla;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
@@ -19,7 +18,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;

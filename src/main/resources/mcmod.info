@@ -12,41 +12,21 @@
 {
   "modid": "Recipear2|IC2",
   "name": "RecipearIC2",
-  "url": "silentspy.net/recipear",
-  "authors": ["Silentspy"],
-  "parent":"Recipear2",
-  "dependencies": [
-      "Recipear2"
-  ]
+  "parent":"Recipear2"
 },
 {
   "modid": "Recipear2|NEI",
   "name": "RecipearNEI",
-  "url": "silentspy.net/recipear",
-  "authors": ["Silentspy"],
-  "parent":"Recipear2",
-  "dependencies": [
-      "Recipear2"
-  ]
+  "parent":"Recipear2"
 },
 {
   "modid": "Recipear2|TC4",
   "name": "RecipearTC4",
-  "url": "silentspy.net/recipear",
-  "authors": ["Silentspy"],
-  "parent":"Recipear2",
-  "dependencies": [
-      "Recipear2"
-  ]
+  "parent":"Recipear2"
 },
 {
   "modid": "Recipear2|Vanilla",
   "name": "RecipearVanilla",
-  "url": "silentspy.net/recipear",
-  "authors": ["Silentspy"],
-  "parent":"Recipear2",
-  "dependencies": [
-      "Recipear2"
-  ]
+  "parent":"Recipear2"
 }
 ]

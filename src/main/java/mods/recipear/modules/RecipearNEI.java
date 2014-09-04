@@ -31,7 +31,7 @@ public class RecipearNEI implements IRecipear{
 			if(BannedRecipes.GetBannedRecipeAmount() > 0) 
 			{
 				for(BannedRecipe recipe : BannedRecipes.getBannedRecipes()) {
-					if(recipe.type.equals("NEI")) {
+					if(recipe.type.equals("NEI") || recipe.type.equals("DEFAULT")) {
 						codechicken.nei.api.API.hideItem(recipe.id);
 						
 						for(ItemStack itemstack : RecipearUtil.getitem(recipe.id)) {
